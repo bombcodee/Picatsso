@@ -6,6 +6,7 @@ import { ImageUploader } from './ImageUploader';
 import { CatDescriptionForm } from './CatDescriptionForm';
 import { PersonalityTagSelector } from './PersonalityTagSelector';
 import { RelationshipInput } from './RelationshipInput';
+import { InputQualityGauge } from './InputQualityGauge';
 
 export function CatInputForm() {
   const { images, description, analysisError } = usePicatssoStore();
@@ -27,6 +28,8 @@ export function CatInputForm() {
           고양이에 대해 알려주세요. 더 자세할수록 더 멋진 그림이 나와요!
         </p>
       </div>
+
+      <InputQualityGauge />
 
       <div className="space-y-6 bg-white rounded-2xl p-6 shadow-sm border">
         <ImageUploader />

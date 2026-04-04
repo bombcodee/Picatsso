@@ -9,9 +9,11 @@ import { AnalysisPage } from '@/components/features/analysis';
 import { ResultPage } from '@/components/features/result';
 import { AnalysisLoading } from '@/components/common/AnalysisLoading';
 import { GenerationLoading } from '@/components/common/GenerationLoading';
+import { useFlowHistory } from '@/hooks/use-flow-history';
 
 export default function Home() {
   const currentStep = usePicatssoStore((s) => s.currentStep);
+  useFlowHistory();
 
   return (
     <>

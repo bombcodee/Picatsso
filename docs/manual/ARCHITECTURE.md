@@ -26,16 +26,21 @@ src/
 │   │   ├── input.tsx
 │   │   ├── tabs.tsx
 │   │   └── textarea.tsx
-│   ├── common/                       # 공통 UI (로딩, 에러, 스텝 표시)
-│   │   └── (M3에서 구현 예정)
-│   ├── layout/                       # 레이아웃 (Header, Footer)
-│   │   └── (M3에서 구현 예정)
+│   ├── common/                       # 공통 UI
+│   │   ├── LoadingSpinner.tsx        # 붓터치 로딩 애니메이션
+│   │   ├── StepIndicator.tsx         # 플로우 단계 표시
+│   │   ├── ErrorDisplay.tsx          # 에러 + 재시도
+│   │   ├── AnalysisLoading.tsx       # 분석 중 로딩
+│   │   └── GenerationLoading.tsx     # 생성 중 로딩
+│   ├── layout/                       # 레이아웃
+│   │   ├── Header.tsx                # 로고 + 뒤로가기 + CTA
+│   │   └── Footer.tsx                # 푸터
 │   └── features/                     # 기능별 컴포넌트 그룹
-│       ├── landing/                  # 랜딩 페이지
-│       ├── upload/                   # 고양이 정보 입력
-│       ├── analysis/                 # AI 분석 결과 표시
+│       ├── landing/                  # 랜딩 (Hero, Feature, CatVision)
+│       ├── upload/                   # 입력 (이미지, 설명, 태그, 관계, 게이지)
+│       ├── analysis/                 # 분석 결과 (성격, 화풍, 감정색감)
 │       ├── generation/               # 이미지 생성 (현재 미사용)
-│       └── result/                   # 결과 갤러리 + 다운로드
+│       └── result/                   # 결과 (갤러리, 카드, 다운로드)
 │
 ├── services/                         # 외부 API 어댑터 레이어
 │   ├── ai/
@@ -52,7 +57,11 @@ src/
 │       └── index.ts                  # 배럴
 │
 ├── hooks/                            # 커스텀 React 훅
-│   └── (M2에서 구현 예정)
+│   ├── use-picatsso-store.ts         # Zustand 스토어 (입력/분석/생성/플로우)
+│   ├── use-cat-analysis.ts           # /api/analyze 호출 훅
+│   ├── use-image-generation.ts       # /api/generate 호출 훅
+│   ├── use-download.ts               # base64 → 다운로드 훅
+│   └── use-flow-history.ts           # URL 히스토리 ↔ 플로우 단계 연동
 │
 ├── lib/
 │   ├── config.ts                     # 환경변수 중앙 관리
@@ -153,4 +162,4 @@ src/
 ---
 
 > 이 문서는 코드 변경 시 자동으로 업데이트됩니다.
-> 마지막 동기화: 2026-04-05 (M1 완료 시점)
+> 마지막 동기화: 2026-04-05 (M4 완료 + 테스트 피드백 반영 시점)

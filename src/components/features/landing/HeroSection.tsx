@@ -22,7 +22,7 @@ export function HeroSection() {
           AI x 고양이 시각 과학 x 피카소
         </p>
 
-        <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight whitespace-nowrap">
           당신의 고양이가{' '}
           <span className="brush-underline picatsso-title">직접 그린</span>
           {' '}그림
