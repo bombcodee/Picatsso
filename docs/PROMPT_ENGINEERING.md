@@ -1,0 +1,163 @@
+# Picatsso - Prompt Engineering
+
+> 이 프로젝트의 핵심 경쟁력.
+> 고양이 성격 분석 → 화풍 매핑 → 이미지 생성 프롬프트 파이프라인을 관리합니다.
+
+---
+
+## 파이프라인 개요
+
+```
+[입력] 집사가 제공한 사진 + 설명 + 태그
+         ↓
+[Step 1] AI 분석 프롬프트 (Gemini/Claude/GPT)
+         → 고양이 성격 유형 도출
+         ↓
+[Step 2] 성격 → 화풍 매핑 테이블
+         → 화풍 스타일 + 키워드 결정
+         ↓
+[Step 3] 이미지 생성 프롬프트 조립 (Gemini Image)
+         → 화풍 + 고양이 시각 컬러 + 피카소 모티브
+         ↓
+[출력] 2~3개 시안 이미지
+```
+
+---
+
+## 감정 색감 시스템 (MVP 적용)
+
+고양이가 좋아하는 대상은 파란색(선명), 싫어하거나 무관심한 대상은 회색/갈색(흐릿)으로 표현.
+→ "고양이의 눈으로 본 세상" 컨셉을 색감의 감정 레이어로 구현
+
+**판단 기준 입력:**
+- 집사와의 관계 (친한지/안 친한지, 무조건 좋아한다고 가정 X)
+- 평상시 함께 지내는 모습 (놀아주는지, 무관심한지, 싸우는지 등)
+- 고양이가 특별히 좋아하는 것/싫어하는 것
+
+**색감 적용 규칙:**
+| 고양이의 감정 | 색감 표현 | 예시 |
+|-------------|----------|------|
+| 매우 좋아함 | 선명한 파란색 (#4A90D9) | 츄르, 좋아하는 집사 |
+| 좋아함 | 밝은 녹색/청록 (#7BAE7F) | 장난감, 캣타워 |
+| 보통 | 노란색/중간톤 (#D4C36A) | 일반 사물 |
+| 무관심 | 흐린 갈색 (#9E8E7E) | 관심 없는 대상 |
+| 싫어함 | 탁한 회색 (#8B7D6B) | 목욕, 병원 |
+
+---
+
+## Step 1: 고양이 성격 분석 프롬프트 (초안)
+
+```
+당신은 고양이 행동 전문가입니다.
+집사가 제공한 고양이의 사진과 설명을 바탕으로 이 고양이의 성격과 특징을 분석해주세요.
+
+[집사 제공 정보]
+- 사진: {uploaded_images}
+- 설명: {user_description}
+- 선택 태그: {selected_tags}
+
+추가 정보 (집사와의 관계):
+- 집에서 고양이와 어떻게 지내는지: {relationship_description}
+- 고양이가 특별히 좋아하는 것: {favorite_things}
+- 고양이가 싫어하는 것: {disliked_things}
+
+다음 형식으로 분석 결과를 JSON으로 반환해주세요:
+{
+  "personality_type": "성격 유형 이름 (예: 장난꾸러기 탐험가)",
+  "keywords": ["키워드1", "키워드2", "키워드3", "키워드4", "키워드5"],
+  "energy_level": "high/medium/low",
+  "temperament": "playful/calm/fierce/curious/aloof/chaotic",
+  "art_style_suggestion": "추천 화풍 설명",
+  "description": "이 고양이의 성격을 2~3문장으로 설명",
+  "emotional_color_map": {
+    "loves": ["츄르", "집사의 무릎"],
+    "likes": ["캣타워", "창밖 구경"],
+    "neutral": ["소파", "TV"],
+    "dislikes": ["목욕", "큰 소리"]
+  },
+  "owner_relationship": "close/neutral/distant/complicated",
+  "owner_relationship_detail": "집사와의 관계를 한 문장으로 설명"
+}
+```
+
+---
+
+## Step 2: 성격 → 화풍 매핑 테이블
+
+| temperament | 화풍 스타일 | 피카소 시기 참조 | 특징 |
+|-------------|-----------|----------------|------|
+| chaotic/엉뚱한 | 입체파 (큐비즘) | 분석적 큐비즘 시기 | 왜곡된 형태, 다중 시점, 파편화 |
+| playful/장난꾸러기 | 다이내믹 표현주의 | 아프리카 미술 영향기 | 역동적 붓터치, 밝은 톤, 움직임 |
+| fierce/사나운 | 강렬한 야수파 | 게르니카 시기 | 굵은 선, 강한 대비, 날카로운 형태 |
+| calm/잔잔한 | 부드러운 장밋빛 | 장밋빛 시기 (1904-1906) | 온화한 곡선, 따뜻한 톤, 포근함 |
+| aloof/도도한 | 클래식 초상화풍 | 신고전주의 시기 | 정제된 구도, 우아한 선, 격식 |
+| curious/호기심 | 초현실주의 혼합 | 초현실주의 영향기 | 몽환적, 다양한 오브제, 꿈 같은 |
+
+---
+
+## Step 3: 이미지 생성 프롬프트 템플릿 (초안)
+
+```
+Create an artistic painting in the style of {art_style}.
+
+Subject: A painting that captures the essence of a {personality_type} cat.
+
+Style guidelines:
+- Inspired by Pablo Picasso's {picasso_period} period
+- {style_specific_instructions}
+
+Color palette (CRITICAL - Cat Vision Colors Only):
+- Primary: Blues (#4A90D9, #2E5FA1, #6BB3E0)
+- Secondary: Muted greens (#7BAE7F, #4A7C59)
+- Accent: Soft yellows (#D4C36A, #B8A93E)
+- NO vivid reds or oranges (cats cannot see these)
+- Replace reds with muted browns (#8B7D6B)
+- Overall desaturated, pastel-like quality
+- This represents how a cat literally sees the world
+
+Mood: {mood_keywords}
+Composition: {composition_guidelines}
+
+The painting should feel as if the cat itself painted it -
+reflecting the cat's {temperament} personality through brushstrokes,
+composition, and emotional energy.
+```
+
+---
+
+## 컬러 팔레트 상수 (구현용)
+
+```typescript
+// lib/constants/cat-vision-palette.ts
+
+export const CAT_VISION_PALETTE = {
+  // 고양이가 선명하게 보는 색
+  primary: {
+    blue: ['#4A90D9', '#2E5FA1', '#6BB3E0', '#1E3A5F'],
+    green: ['#7BAE7F', '#4A7C59', '#A8C9A0'],
+    yellow: ['#D4C36A', '#B8A93E', '#E8D98A'],
+  },
+  // 고양이에게 흐릿하게 보이는 색 (변환된 값)
+  muted: {
+    red_as_brown: '#8B7D6B',
+    orange_as_beige: '#9E8E7E',
+    pink_as_gray: '#A09090',
+  },
+  // 배경/뉴트럴
+  neutral: {
+    warm_gray: '#D0CFC8',
+    cool_gray: '#B8BCC0',
+    cream: '#E5E0D5',
+  },
+} as const;
+```
+
+---
+
+## 튜닝 로그
+
+> 프롬프트 수정 이력을 여기에 기록합니다.
+
+| 날짜 | 변경 내용 | 이유 | 결과 |
+|------|-----------|------|------|
+| — | 초안 작성 | 프로젝트 시작 | 개발 시 테스트 예정 |
