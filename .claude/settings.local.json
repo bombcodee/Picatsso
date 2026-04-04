@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.zezelife.com)",
+      "Bash(git init:*)",
+      "Bash(npx create-next-app@latest picatsso-temp --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --use-npm --no-turbopack)",
+      "Bash(cp -r picatsso-temp/src picatsso-temp/public picatsso-temp/package.json picatsso-temp/package-lock.json picatsso-temp/tsconfig.json picatsso-temp/next.config.ts picatsso-temp/next-env.d.ts picatsso-temp/postcss.config.mjs picatsso-temp/eslint.config.mjs Picatsso/)",
+      "Bash(cp picatsso-temp/AGENTS.md Picatsso/)",
+      "Bash(npm install:*)",
+      "Bash(npx shadcn@latest init -y --defaults)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\JOOHO\\.claude\\plans",
+      "C:\\Users\\JOOHO\\Desktop\\Develope\\picatsso-temp"
+    ]
+  }
+}
