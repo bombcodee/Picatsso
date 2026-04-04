@@ -13,6 +13,10 @@
 - `docs/references/cat_color_vision.md` — 고양이 색각 과학 레퍼런스
 - `docs/PROMPT_ENGINEERING.md` — 프롬프트 파이프라인 (핵심 경쟁력)
 - `docs/MEMORY.md` — 세션 연속성 메모리 (진행 상황 요약)
+- `docs/manual/ARCHITECTURE.md` — 아키텍처 + 파일 구조 + 어댑터 교체 가이드
+- `docs/manual/DATA_FLOW.md` — 데이터 흐름도
+- `docs/manual/API_SPEC.md` — API 엔드포인트 스펙
+- `docs/manual/SETUP_GUIDE.md` — 환경 설정 가이드
 
 ## 언어
 - 모든 요청 응답 및 문서 작성은 **한국어**로 진행
