@@ -74,10 +74,30 @@ npm install @google/generative-ai
 - **무료:** ~250,000 TPM (분당 토큰), 약 500장/일
 - **유료:** 티어별 증가 (Tier 1 → Tier 3)
 
-### Picatsso 적용 전략
-- **개발/테스트:** Nano Banana 무료 티어 (~500장/일)
-- **프로덕션:** Nano Banana 2 ($0.067/장, 1K) → 사용자 1회 생성 시 2~3장 = $0.13~$0.20
-- **SDK:** `@google/generative-ai` npm 패키지 (Next.js 호환)
+### Picatsso 실제 적용 현황 (2026-04-06 테스트 결과)
+
+#### 무료 티어 제한 사항 (실측)
+- **텍스트 분석 모델 (`gemini-2.5-flash`):** ✅ 무료 할당량 있음, 정상 작동
+- **이미지 생성 모델 전부:** ❌ 무료 할당량 0 (limit: 0)
+  - `gemini-2.5-flash-image`, `gemini-3.1-flash-image-preview`, `gemini-3-pro-image-preview` 전부 429 에러
+  - **Google Cloud 결제 설정 필수** (종량제, $300 무료 크레딧 90일)
+- **구버전 모델 (`gemini-2.0-flash`):** ❌ 무료 할당량 0 (텍스트도 안 됨)
+
+#### 현재 Picatsso 모델 설정
+| 용도 | 모델 | 이유 |
+|------|------|------|
+| **고양이 분석** | `gemini-2.5-flash` | 비용 효율 최우선. 우리 용도에서 Pro와 체감 차이 미미. SaaS 업계 표준도 Flash급 사용 |
+| **이미지 생성** | `gemini-2.5-flash-image` | 비용 효율 + 이미지 생성 지원 확인됨 |
+
+#### 향후 이미지 모델 업그레이드 후보
+| 모델 | 가격 | 특징 |
+|------|------|------|
+| `gemini-3-pro-image-preview` | ~$0.13/장 | 최고 품질 |
+| `imagen-4.0-generate-001` | ~$0.04/장 | Google 전용 이미지 모델, SDK 호출 방식 다름 |
+
+#### SDK
+- `@google/generative-ai` npm 패키지 (Next.js 호환)
+- 이미지 생성 시 `generationConfig: { responseModalities: ['image', 'text'] }` 필수
 
 ---
 

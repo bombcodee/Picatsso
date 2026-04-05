@@ -2,8 +2,8 @@
 export const config = {
   gemini: {
     apiKey: process.env.GEMINI_API_KEY ?? '',
-    analysisModel: 'gemini-2.5-flash-preview-04-17',
-    imageModel: 'gemini-2.0-flash-exp',
+    analysisModel: 'gemini-2.5-flash',
+    imageModel: 'gemini-2.5-flash-image',
   },
   upload: {
     maxFiles: 3,
