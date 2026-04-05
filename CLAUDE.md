@@ -11,7 +11,9 @@
 - `docs/BUG_REPORTS.md` — 버그 리포트
 - `docs/references/REFERENCES.md` — 기술 참고자료 (API 스펙, 가격, 리서치 결과)
 - `docs/references/cat_color_vision.md` — 고양이 색각 과학 레퍼런스
-- `docs/PROMPT_ENGINEERING.md` — 프롬프트 파이프라인 (핵심 경쟁력)
+- `docs/prompt-management/PROMPT_ENGINEERING.md` — 프롬프트 설계 문서
+- `docs/prompt-management/artist-reference.html` — 화가별 시기/기법/키워드 레퍼런스
+- `docs/prompt-management/discussion-log.html` — 프롬프트 토의 로그 + 결정 사항
 - `docs/MEMORY.md` — 세션 연속성 메모리 (진행 상황 요약)
 - `docs/manual/ARCHITECTURE.md` — 아키텍처 + 파일 구조 + 어댑터 교체 가이드
 - `docs/manual/DATA_FLOW.md` — 데이터 흐름도

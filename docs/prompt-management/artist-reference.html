@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Picatsso — 화가 레퍼런스</title>
+  <style>
+    :root {
+      --blue: #4A90D9;
+      --green: #7BAE7F;
+      --yellow: #D4C36A;
+      --muted: #8B7D6B;
+      --bg: #fafafa;
+      --card: #ffffff;
+      --border: #e5e7eb;
+      --text: #1f2937;
+      --text-muted: #6b7280;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding: 2rem; max-width: 1100px; margin: 0 auto; }
+    h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    h1 span { background: linear-gradient(135deg, var(--blue), var(--green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .subtitle { color: var(--text-muted); margin-bottom: 2rem; }
+
+    /* 탭 */
+    .tab-container { margin-bottom: 2rem; }
+    .tab-buttons { display: flex; gap: 0.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0; flex-wrap: wrap; }
+    .tab-btn { padding: 0.6rem 1.2rem; border: none; background: none; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: var(--text-muted); border-bottom: 3px solid transparent; transition: all 0.2s; }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+    .tab-content { display: none; padding-top: 1.5rem; }
+    .tab-content.active { display: block; }
+
+    /* 시기 카드 */
+    .period-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; }
+    .period-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .period-name { font-size: 1.15rem; font-weight: 700; }
+    .period-years { font-size: 0.8rem; color: var(--text-muted); background: var(--bg); padding: 0.2rem 0.6rem; border-radius: 4px; }
+    .period-mapping { display: inline-block; font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; margin-bottom: 0.75rem; }
+    .mapped { background: #dbeafe; color: #1e40af; }
+    .unmapped { background: #fef3c7; color: #92400e; }
+    .period-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem; }
+
+    .keywords-section { margin-bottom: 1rem; }
+    .keywords-label { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.4rem; }
+    .keyword { display: inline-block; background: var(--bg); border: 1px solid var(--border); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; margin: 0.15rem; font-family: monospace; }
+
+    .color-swatches { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .swatch { width: 40px; height: 40px; border-radius: 8px; border: 1px solid var(--border); position: relative; }
+    .swatch-label { font-size: 0.65rem; color: var(--text-muted); text-align: center; margin-top: 0.2rem; }
+
+    .cat-connection { background: #f0f9ff; border-left: 3px solid var(--blue); padding: 0.75rem 1rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; margin-top: 0.75rem; }
+    .cat-connection strong { color: var(--blue); }
+
+    /* 공통 특징 */
+    .common-section { background: linear-gradient(135deg, #f0f9ff, #ecfdf5); border: 2px solid var(--blue); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; }
+    .common-title { font-weight: 700; color: var(--blue); margin-bottom: 1rem; font-size: 1.1rem; }
+    .common-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .common-item { background: white; padding: 0.75rem; border-radius: 8px; font-size: 0.85rem; }
+    .common-item strong { display: block; margin-bottom: 0.25rem; }
+
+    table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.85rem; }
+    th { background: var(--bg); text-align: left; padding: 0.5rem; border-bottom: 2px solid var(--border); }
+    td { padding: 0.5rem; border-bottom: 1px solid var(--border); }
+  </style>
+</head>
+<body>
+
+<h1>🖼️ <span>Picatsso</span> 화가 레퍼런스</h1>
+<p class="subtitle">화가별 시기/기법/색감/키워드를 정리합니다. 프롬프트 작성의 기반 자료.</p>
+
+<!-- ===== 피카소 공통 특징 ===== -->
+<div class="common-section">
+  <div class="common-title">🎨 피카소 공통 특징 (모든 시기에 적용)</div>
+  <div class="common-grid">
+    <div class="common-item"><strong>대담한 윤곽선</strong>굵은 검은 선으로 형태를 규정. 피카소의 시그니처.</div>
+    <div class="common-item"><strong>면 분할</strong>깊이감보다 평면적 색면으로 구성. 깊이보다 구조.</div>
+    <div class="common-item"><strong>다중 시점</strong>정면+측면을 동시에 표현. 하나의 대상을 여러 각도에서.</div>
+    <div class="common-item"><strong>왜곡된 비율</strong>현실적 비율 무시. 감정과 의미에 따라 크기 변형.</div>
+  </div>
+  <div class="cat-connection" style="margin-top: 1rem;">
+    <strong>🐱 고양이와의 연결:</strong> 고양이의 넓은 시야각(200°)은 다중 시점과 자연스럽게 연결되고, 낮은 시점(바닥)에서 올려보는 시야는 왜곡된 비율과 맞닿습니다.
+  </div>
+</div>
+
+<!-- ===== 화가 탭 ===== -->
+<div class="tab-container">
+  <div class="tab-buttons">
+    <button class="tab-btn active" onclick="switchTab('picasso')">파블로 피카소</button>
+    <button class="tab-btn" onclick="switchTab('gogh')">빈센트 반 고흐 (예정)</button>
+    <button class="tab-btn" onclick="switchTab('monet')">클로드 모네 (예정)</button>
+    <button class="tab-btn" onclick="switchTab('munch')">에드바르 뭉크 (예정)</button>
+    <button class="tab-btn" onclick="switchTab('klimt')">구스타프 클림트 (예정)</button>
+  </div>
+
+  <!-- ===== 피카소 탭 ===== -->
+  <div id="tab-picasso" class="tab-content active">
+
+    <div class="period-card">
+      <div class="period-header">
+        <span class="period-name">청색 시기 (Blue Period)</span>
+        <span class="period-years">1901 — 1904</span>
+      </div>
+      <span class="period-mapping unmapped">⏳ 매핑 예정 (melancholy/lonely)</span>
+      <p class="period-desc">친구의 죽음 이후 시작된 우울과 고독의 시기. 차가운 파란색과 녹색이 지배적이며, 가난하고 외로운 인물들을 길쭉하게 표현.</p>
+      <div class="keywords-section">
+        <div class="keywords-label">프롬프트 키워드 (확정 시 적용)</div>
+        <span class="keyword">Blue Period Picasso</span>
+        <span class="keyword">cold blue-green monochrome</span>
+        <span class="keyword">elongated melancholic figures</span>
+        <span class="keyword">thin delicate outlines</span>
+        <span class="keyword">solitude and introspection</span>
+        <span class="keyword">somber muted atmosphere</span>
+      </div>
+      <div class="color-swatches">
+        <div><div class="swatch" style="background:#1E3A5F"></div><div class="swatch-label">진한 남색</div></div>
+        <div><div class="swatch" style="background:#4A90D9"></div><div class="swatch-label">피카소 블루</div></div>
+        <div><div class="swatch" style="background:#4A7C59"></div><div class="swatch-label">어두운 녹색</div></div>
+        <div><div class="swatch" style="background:#8B7D6B"></div><div class="swatch-label">탁한 갈색</div></div>
+      </div>
+      <div class="cat-connection">
+        <strong>🐱 고양이 연결:</strong> 고양이의 야간 시력(간상세포↑)과 완벽한 매칭. 어두운 곳에서도 파란빛을 선명하게 보는 고양이에게 청색 시기는 가장 자연스러운 화풍.
+      </div>
+    </div>
+
+    <div class="period-card">
+      <div class="period-header">
+        <span class="period-name">장밋빛 시기 (Rose Period)</span>
+        <span class="period-years">1904 — 1906</span>
+      </div>
+      <span class="period-mapping mapped">✅ calm (잔잔한/포근한)</span>
+      <p class="period-desc">청색 시기에서 벗어나 따뜻한 톤으로 전환. 서커스 단원, 광대, 곡예사를 주제로 부드러운 분위기.</p>
+      <div class="keywords-section">
+        <div class="keywords-label">현재 프롬프트 키워드</div>
+        <span class="keyword">Rose Period</span>
+        <span class="keyword">soft curves</span>
+        <span class="keyword">warm tones</span>
+        <span class="keyword">gentle</span>
+        <span class="keyword">tender atmosphere</span>
+      </div>
+      <div class="keywords-section">
+        <div class="keywords-label">추가 예정 키워드</div>
+        <span class="keyword">circus and harlequin motifs</span>
+        <span class="keyword">warm pinks and earth tones mapped to cat vision yellows</span>
+        <span class="keyword">rounded soft brushstrokes</span>
+        <span class="keyword">intimate domestic scenes</span>
+      </div>
+      <div class="color-swatches">
+        <div><div class="swatch" style="background:#D4C36A"></div><div class="swatch-label">따뜻한 노란</div></div>
+        <div><div class="swatch" style="background:#9E8E7E"></div><div class="swatch-label">베이지(핑크변환)</div></div>
+        <div><div class="swatch" style="background:#7BAE7F"></div><div class="swatch-label">부드러운 녹색</div></div>
+        <div><div class="swatch" style="background:#E8D98A"></div><div class="swatch-label">밝은 노란</div></div>
+      </div>
+    </div>
+
+    <div class="period-card">
+      <div class="period-header">
+        <span class="period-name">아프리카 미술 영향기 (African Art Period)</span>
+        <span class="period-years">1907</span>
+      </div>
+      <span class="period-mapping mapped">✅ playful (장난꾸러기)</span>
+      <p class="period-desc">아프리카 부족 마스크에서 영감. 얼굴과 신체를 기하학적으로 단순화하고 각진 형태로 표현. 아비뇽의 처녀들이 대표작.</p>
+      <div class="keywords-section">
+        <div class="keywords-label">현재 프롬프트 키워드</div>
+        <span class="keyword">dynamic expressionism</span>
+        <span class="keyword">energetic brushstrokes</span>
+        <span class="keyword">bright tones</span>
+        <span class="keyword">movement</span>
+        <span class="keyword">African art period</span>
+      </div>
+      <div class="keywords-section">
+        <div class="keywords-label">추가 예정 키워드</div>
+        <span class="keyword">angular geometric simplified forms</span>
+        <span class="keyword">bold thick outlines like African masks</span>
+        <span class="keyword">flat color planes with strong contrast</span>
+        <span class="keyword">primitive energy and raw expressive power</span>
+      </div>
+    </div>
+
+    <div class="period-card">
+      <div class="period-header">
+        <span class="period-name">분석적 큐비즘 (Analytical Cubism)</span>
+        <span class="period-years">1909 — 1912</span>
+      </div>
+      <span class="period-mapping mapped">✅ chaotic (엉뚱한)</span>
+      <p class="period-desc">대상을 분해하여 여러 시점에서 동시에 표현. 갈색/회색 단색조, 격자 구조, 파편화된 면들의 집합.</p>
+      <div class="keywords-section">
+        <div class="keywords-label">현재 프롬프트 키워드</div>
+        <span class="keyword">cubism</span>
+        <span class="keyword">fragmented forms</span>
+        <span class="keyword">multiple perspectives</span>
+        <span class="keyword">geometric abstraction</span>
+        <span class="keyword">analytical cubism</span>
+      </div>
+      <div class="keywords-section">
+        <div class="keywords-label">추가 예정 키워드</div>
+        <span class="keyword">monochromatic browns and grays mapped to cat vision</span>
+        <span class="keyword">grid-like structure</span>
+        <span class="keyword">simultaneous multiple viewpoints of same object</span>
+        <span class="keyword">interlocking fractured planes</span>
+      </div>
+      <div class="cat-connection">
+        <strong>🐱 고양이 연결:</strong> 고양이의 넓은 시야각(200°)이 다중 시점과 자연스럽게 연결. 고양이가 정말로 여러 각도를 동시에 보는 것을 큐비즘으로 표현.
+      </div>
+    </div>
+
+    <div class="period-card">
+      <div class="period-header">
+        <span class="period-name">종합적 큐비즘 (Synthetic Cubism)</span>
+        <span class="period-years">1912 — 1919</span>
+      </div>
+      <span class="period-mapping unmapped">⏳ 추가 후보</span>
+      <p class="period-desc">분석적 큐비즘에서 발전. 콜라주 기법 도입, 더 밝은 색상, 신문/문자 요소 삽입, 질감 대비.</p>
+      <div class="keywords-section">
+        <div class="keywords-label">프롬프트 키워드 (확정 시 적용)</div>
+        <span class="keyword">Synthetic Cubism collage style</span>
+        <span class="keyword">bright bold colors</span>
+        <span class="keyword">texture contrast and mixed media feel</span>
+        <span class="keyword">newspaper and text elements</span>
+        <span class="keyword">playful composition</span>
+      </div>
+    </div>
+
+    <div class="period-card">
+      <div class="period-header">
+        <span class="period-name">신고전주의 (Neoclassicism)</span>
+        <span class="period-years">1918 — 1925</span>
+      </div>
+      <span class="period-mapping mapped">✅ aloof (도도한)</span>
+      <p class="period-desc">고전 회귀. 거대하고 조각같은 인체, 절제된 색감, 정갈한 구도. 그리스/로마 미술에서 영감.</p>
+      <div class="keywords-section">
+        <div class="keywords-label">현재 프롬프트 키워드</div>
+        <span class="keyword">neoclassicism</span>
+        <span class="keyword">refined composition</span>
+        <span class="keyword">elegant lines</span>
+        <span class="keyword">formal portrait</span>
+        <span class="keyword">dignified</span>
+      </div>
+      <div class="keywords-section">
+        <div class="keywords-label">추가 예정 키워드</div>
+        <span class="keyword">monumental sculptural volume</span>
+        <span class="keyword">classical Greek and Roman influence</span>
+        <span class="keyword">restrained muted palette</span>
+        <span class="keyword">heavy solid forms with gravitas</span>
+      </div>
+    </div>
+
+    <div class="period-card">
+      <div class="period-header">
+        <span class="period-name">초현실주의 영향 (Surrealist Influence)</span>
+        <span class="period-years">1925 — 1937</span>
+      </div>
+      <span class="period-mapping mapped">✅ curious (호기심 많은)</span>
+      <p class="period-desc">초현실주의 운동과 교류하며 왜곡된 형태, 몽환적 분위기, 뼈/유기체 형태. 꿈과 현실의 경계를 허뭄.</p>
+      <div class="keywords-section">
+        <div class="keywords-label">현재 프롬프트 키워드</div>
+        <span class="keyword">surrealism</span>
+        <span class="keyword">dreamlike</span>
+        <span class="keyword">varied objects</span>
+        <span class="keyword">whimsical</span>
+        <span class="keyword">fantastical elements</span>
+      </div>
+      <div class="keywords-section">
+        <div class="keywords-label">추가 예정 키워드</div>
+        <span class="keyword">biomorphic bone-like organic shapes</span>
+        <span class="keyword">melting distorted reality</span>
+        <span class="keyword">boundary between dream and waking</span>
+        <span class="keyword">unsettling yet beautiful compositions</span>
+      </div>
+    </div>
+
+    <div class="period-card">
+      <div class="period-header">
+        <span class="period-name">게르니카 시기 (Guernica Period)</span>
+        <span class="period-years">1937</span>
+      </div>
+      <span class="period-mapping mapped">✅ fierce (사나운/싸움꾼)</span>
+      <p class="period-desc">스페인 내전의 참상을 고발. 흑백+회색, 찢어진 형태, 날카로운 삼각형, 비명지르는 인물과 동물.</p>
+      <div class="keywords-section">
+        <div class="keywords-label">현재 프롬프트 키워드</div>
+        <span class="keyword">fauvism</span>
+        <span class="keyword">bold lines</span>
+        <span class="keyword">strong contrast</span>
+        <span class="keyword">sharp angular forms</span>
+        <span class="keyword">Guernica style</span>
+      </div>
+      <div class="keywords-section">
+        <div class="keywords-label">추가 예정 키워드</div>
+        <span class="keyword">black white and gray palette mapped to cat muted tones</span>
+        <span class="keyword">torn fragmented screaming forms</span>
+        <span class="keyword">sharp triangular shapes</span>
+        <span class="keyword">raw emotional intensity and anguish</span>
+        <span class="keyword">stark dramatic lighting</span>
+      </div>
+      <div class="cat-connection">
+        <strong>🐱 고양이 연결:</strong> 사나운 고양이의 경계심과 공격성이 게르니카의 날카로운 형태와 강렬한 감정에 자연스럽게 매핑.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== 고흐 탭 (예정) ===== -->
+  <div id="tab-gogh" class="tab-content">
+    <div class="period-card">
+      <p class="period-desc">🚧 추후 개발 예정 — ROADMAP 아이디어 "화가 스타일 확장 시스템" 참조</p>
+      <p class="period-desc">소용돌이 붓터치, 별이 빛나는 밤, 강렬한 노란색/파란색 대비, 두꺼운 임파스토 기법</p>
+    </div>
+  </div>
+
+  <!-- ===== 모네 탭 (예정) ===== -->
+  <div id="tab-monet" class="tab-content">
+    <div class="period-card">
+      <p class="period-desc">🚧 추후 개발 예정</p>
+      <p class="period-desc">인상파, 빛과 색의 흐름, 부드러운 붓터치, 자연 풍경, 수련</p>
+    </div>
+  </div>
+
+  <!-- ===== 뭉크 탭 (예정) ===== -->
+  <div id="tab-munch" class="tab-content">
+    <div class="period-card">
+      <p class="period-desc">🚧 추후 개발 예정</p>
+      <p class="period-desc">강렬한 감정 표현, 절규, 불안, 소용돌이치는 하늘, 왜곡된 인물</p>
+    </div>
+  </div>
+
+  <!-- ===== 클림트 탭 (예정) ===== -->
+  <div id="tab-klimt" class="tab-content">
+    <div class="period-card">
+      <p class="period-desc">🚧 추후 개발 예정</p>
+      <p class="period-desc">장식적 패턴, 금박, 모자이크, 화려한 오너먼트, 에로티시즘</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + tabId).classList.add('active');
+}
+</script>
+
+</body>
+</html>

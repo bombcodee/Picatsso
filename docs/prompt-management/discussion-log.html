@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Picatsso — 프롬프트 토의 로그</title>
+  <style>
+    :root {
+      --blue: #4A90D9;
+      --green: #7BAE7F;
+      --yellow: #D4C36A;
+      --muted: #8B7D6B;
+      --bg: #fafafa;
+      --card: #ffffff;
+      --border: #e5e7eb;
+      --text: #1f2937;
+      --text-muted: #6b7280;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding: 2rem; max-width: 1000px; margin: 0 auto; }
+    h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    h1 span { background: linear-gradient(135deg, var(--blue), var(--green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .subtitle { color: var(--text-muted); margin-bottom: 2rem; }
+
+    /* 흐름도 */
+    .flow-section { background: var(--card); border: 2px solid var(--blue); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; }
+    .flow-title { font-weight: 700; color: var(--blue); margin-bottom: 1rem; font-size: 1.1rem; }
+    .flow-steps { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; justify-content: center; }
+    .flow-step { background: var(--blue); color: white; padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-align: center; min-width: 120px; }
+    .flow-step.ref { background: var(--green); }
+    .flow-step.doc { background: var(--yellow); color: var(--text); }
+    .flow-step.code { background: var(--muted); color: white; }
+    .flow-arrow { font-size: 1.2rem; color: var(--text-muted); }
+    .flow-files { margin-top: 1rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem; }
+    .flow-file { background: var(--bg); padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.75rem; border-left: 3px solid var(--border); }
+    .flow-file code { font-size: 0.7rem; color: var(--text-muted); }
+
+    /* 토의 카드 */
+    .discussion { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    .discussion-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .discussion-date { font-size: 0.8rem; color: var(--text-muted); background: var(--bg); padding: 0.2rem 0.6rem; border-radius: 4px; }
+    .discussion-status { font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 4px; font-weight: 600; }
+    .status-done { background: #dcfce7; color: #166534; }
+    .status-progress { background: #dbeafe; color: #1e40af; }
+    .status-pending { background: #fef3c7; color: #92400e; }
+    .discussion h3 { font-size: 1.1rem; margin-bottom: 0.75rem; }
+    .discussion p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem; }
+    .decision { background: #f0f9ff; border-left: 3px solid var(--blue); padding: 0.75rem 1rem; border-radius: 0 6px 6px 0; margin-top: 0.75rem; font-size: 0.85rem; }
+    .decision strong { color: var(--blue); }
+    table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.85rem; }
+    th { background: var(--bg); text-align: left; padding: 0.5rem; border-bottom: 2px solid var(--border); }
+    td { padding: 0.5rem; border-bottom: 1px solid var(--border); }
+    .tag { display: inline-block; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.7rem; font-weight: 600; margin-right: 0.25rem; }
+    .tag-prompt { background: #ede9fe; color: #5b21b6; }
+    .tag-concept { background: #fce7f3; color: #9d174d; }
+    .tag-artist { background: #fff7ed; color: #9a3412; }
+    .tag-ux { background: #ecfdf5; color: #065f46; }
+  </style>
+</head>
+<body>
+
+<h1>🎨 <span>Picatsso</span> 프롬프트 토의 로그</h1>
+<p class="subtitle">프롬프트 개선 관련 토의 내용과 결정 사항을 기록합니다.</p>
+
+<!-- ===== 흐름도 (상단 고정) ===== -->
+<div class="flow-section">
+  <div class="flow-title">📋 프롬프트 관리 흐름</div>
+  <div class="flow-steps">
+    <div class="flow-step">① 토의 (대화)</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">② 토의 기록</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step ref">③ 화가 레퍼런스</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step doc">④ 설계 문서</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step code">⑤ 코드 적용</div>
+  </div>
+  <div class="flow-files">
+    <div class="flow-file">② <code>discussion-log.html</code><br>토의 내용 + 결정 사항</div>
+    <div class="flow-file">③ <code>artist-reference.html</code><br>화가별 시기/기법/색감/키워드</div>
+    <div class="flow-file">④ <code>PROMPT_ENGINEERING.md</code><br>프롬프트 조립 규칙/파이프라인</div>
+    <div class="flow-file">⑤ <code>prompts.ts</code> + <code>personality-mapping.ts</code><br>AI에 전달되는 최종 프롬프트</div>
+  </div>
+</div>
+
+<!-- ===== 토의 기록 (최신순) ===== -->
+
+<div class="discussion">
+  <div class="discussion-header">
+    <span class="discussion-date">2026-04-06</span>
+    <span class="discussion-status status-pending">토의 중</span>
+  </div>
+  <h3><span class="tag tag-artist">화가</span><span class="tag tag-prompt">프롬프트</span> 피카소 시기별 기법 강화 + 고양이×피카소 연결</h3>
+  <p>현재 프롬프트의 피카소 특징이 추상적이라 AI가 매번 다른 스타일로 그림. 시기별 구체적 기법을 promptKeywords에 반영 필요.</p>
+
+  <table>
+    <tr><th>개선 방향</th><th>내용</th><th>상태</th></tr>
+    <tr><td>1. promptKeywords 강화</td><td>6가지 화풍의 키워드를 실제 피카소 기법으로 대폭 확장</td><td>승인 대기</td></tr>
+    <tr><td>2. 피카소 공통 특징 추가</td><td>굵은 윤곽선, 면 분할, 다중 시점, 왜곡 비율 — 부드럽게 적용</td><td>승인 대기</td></tr>
+    <tr><td>3. 고양이×피카소 연결</td><td>넓은 시야각→다중시점, 야간시력→청색톤, 이색형→제한팔레트</td><td>승인 대기</td></tr>
+    <tr><td>4. 청색 시기 추가</td><td>새 기질 추가 (melancholy/lonely) — 쓸쓸한 고양이용</td><td>옵션 A/B/C 선택 대기</td></tr>
+  </table>
+
+  <table>
+    <tr><th>피카소 시기</th><th>매핑 기질</th><th>핵심 기법</th></tr>
+    <tr><td>청색 시기 (1901-1904)</td><td>미정 (추가 예정)</td><td>차가운 청색/녹색, 길쭉한 형태, 슬픔/고독, 얇은 윤곽선</td></tr>
+    <tr><td>장밋빛 시기 (1904-1906)</td><td>calm</td><td>따뜻한 톤, 서커스/광대 모티프, 부드러운 곡선</td></tr>
+    <tr><td>아프리카 미술 (1907)</td><td>playful</td><td>각진 형태, 마스크, 기하학적 단순화, 굵은 윤곽선</td></tr>
+    <tr><td>분석적 큐비즘 (1909-1912)</td><td>chaotic</td><td>파편화된 면, 다중 시점, 격자 구조, 단색조</td></tr>
+    <tr><td>종합적 큐비즘 (1912-1919)</td><td>(추가 후보)</td><td>콜라주, 밝은 색, 질감 대비, 문자 요소</td></tr>
+    <tr><td>신고전주의 (1918-1925)</td><td>aloof</td><td>거대한 볼륨, 조각같은 형태, 고전적 구도</td></tr>
+    <tr><td>초현실주의 (1925-1937)</td><td>curious</td><td>왜곡된 형태, 몽환적, 뼈/유기체, 꿈과 현실 혼합</td></tr>
+    <tr><td>게르니카 (1937)</td><td>fierce</td><td>흑백+회색, 찢어진 형태, 날카로운 삼각형, 비명</td></tr>
+  </table>
+
+  <table>
+    <tr><th>고양이 특성</th><th>피카소 기법</th><th>연결 이유</th></tr>
+    <tr><td>넓은 시야각 (200°)</td><td>다중 시점</td><td>고양이는 진짜로 여러 각도를 동시에 봄</td></tr>
+    <tr><td>야간 시력 (간상세포↑)</td><td>청색 시기 톤</td><td>어두운 곳에서도 파란빛을 선명하게 봄</td></tr>
+    <tr><td>움직임 추적 본능</td><td>역동적 붓터치</td><td>사냥꾼의 눈으로 움직임을 포착</td></tr>
+    <tr><td>이색형 색각</td><td>제한된 팔레트</td><td>빨강을 못 보니 자연스럽게 제한적</td></tr>
+    <tr><td>낮은 시점 (바닥)</td><td>왜곡된 비율</td><td>아래서 올려보면 사물이 왜곡됨</td></tr>
+  </table>
+</div>
+
+<div class="discussion">
+  <div class="discussion-header">
+    <span class="discussion-date">2026-04-06</span>
+    <span class="discussion-status status-done">완료</span>
+  </div>
+  <h3><span class="tag tag-prompt">프롬프트</span> 감정 표현 4가지 규칙</h3>
+  <p>장면에 좋아하는/싫어하는 것이 실제로 있을 때와 없을 때의 표현 방식을 구분.</p>
+  <div class="decision">
+    <strong>결정:</strong> 4가지 규칙 확정 — ① 좋아하는 것 있으면 파란색 강조 ② 싫어하는 것 있으면 회색 흐릿 ③ 없으면 파레이돌리아 ④ 싫어하는 것 없으면 구석에 암시<br>
+    <strong>적용:</strong> prompts.ts RULE 1~4로 반영 완료
+  </div>
+</div>
+
+<div class="discussion">
+  <div class="discussion-header">
+    <span class="discussion-date">2026-04-06</span>
+    <span class="discussion-status status-done">완료</span>
+  </div>
+  <h3><span class="tag tag-concept">컨셉</span><span class="tag tag-prompt">프롬프트</span> 파레이돌리아 효과</h3>
+  <p>좋아하는 것을 직접 그리면 흥미가 떨어지고, AI 결과가 정확하지 않을 때 실망할 위험. 대신 자연물이 형태를 닮는 방식으로.</p>
+  <div class="decision">
+    <strong>결정:</strong> 파레이돌리아 효과 채택 — 좋아하는 강도에 따라 뚜렷함 조절 (보통→색감만, 많이→형태 닮음, 집착→환각수준)<br>
+    <strong>적용:</strong> prompts.ts EMOTIONAL EXPRESSION 섹션 반영 완료
+  </div>
+</div>
+
+<div class="discussion">
+  <div class="discussion-header">
+    <span class="discussion-date">2026-04-06</span>
+    <span class="discussion-status status-done">완료</span>
+  </div>
+  <h3><span class="tag tag-concept">컨셉</span> 고양이 시점 전환</h3>
+  <p>"고양이를 그린 그림" → "고양이가 화가라면 이 장면을 이렇게 그릴 거야!" 컨셉 확립.</p>
+  <div class="decision">
+    <strong>결정:</strong> 결과물은 고양이가 바라보는 장면을 고양이가 직접 그린 그림. 입력에 "장면 설명 + 장면 사진" 추가.<br>
+    <strong>적용:</strong> SceneInput 컴포넌트, prompts.ts "paint AS a cat" 관점, sceneDescription 파이프라인 전체 연결 완료
+  </div>
+</div>
+
+<div class="discussion">
+  <div class="discussion-header">
+    <span class="discussion-date">2026-04-06</span>
+    <span class="discussion-status status-done">완료</span>
+  </div>
+  <h3><span class="tag tag-prompt">프롬프트</span> 프롬프트 언어 선택</h3>
+  <p>이미지 생성은 영어가 품질이 좋지만, 한국어로 관리하고 싶다는 요구.</p>
+  <div class="decision">
+    <strong>결정:</strong> 영어 프롬프트 + 한국어 번역 주석 (JSDoc). AI에는 영어로, 관리는 한국어로.<br>
+    <strong>적용:</strong> prompts.ts에 한국어 주석 블록 추가 완료
+  </div>
+</div>
+
+<div class="discussion">
+  <div class="discussion-header">
+    <span class="discussion-date">2026-04-05</span>
+    <span class="discussion-status status-done">완료</span>
+  </div>
+  <h3><span class="tag tag-ux">UX</span> D2 힌트가 흥미를 떨어뜨리는 문제</h3>
+  <p>"여기 적으면 파란색으로 나와요" 같은 구체적 결과 예고가 위험한지 토의.</p>
+  <div class="decision">
+    <strong>결정:</strong> 결과 예고 X, 동기 부여 O. "AI가 더 잘 이해한다" 수준으로만 유도.<br>
+    <strong>적용:</strong> D2~D4는 개발 예정으로 보류. D1(게이지)만 MVP 적용.
+  </div>
+</div>
+
+</body>
+</html>
