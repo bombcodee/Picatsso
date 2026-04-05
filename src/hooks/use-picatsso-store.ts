@@ -18,12 +18,16 @@ interface InputSlice {
   relationshipDescription: string;
   favoriteThings: string;
   dislikedThings: string;
+  sceneDescription: string;
+  sceneImage: File | null;
   setImages: (images: File[]) => void;
   setDescription: (description: string) => void;
   setTags: (tags: string[]) => void;
   setRelationshipDescription: (text: string) => void;
   setFavoriteThings: (text: string) => void;
   setDislikedThings: (text: string) => void;
+  setSceneDescription: (text: string) => void;
+  setSceneImage: (file: File | null) => void;
   resetInput: () => void;
 }
 
@@ -66,6 +70,8 @@ const initialInputState = {
   relationshipDescription: '',
   favoriteThings: '',
   dislikedThings: '',
+  sceneDescription: '',
+  sceneImage: null as File | null,
 };
 
 export const usePicatssoStore = create<PicatssoStore>((set) => ({
@@ -77,6 +83,8 @@ export const usePicatssoStore = create<PicatssoStore>((set) => ({
   setRelationshipDescription: (relationshipDescription) => set({ relationshipDescription }),
   setFavoriteThings: (favoriteThings) => set({ favoriteThings }),
   setDislikedThings: (dislikedThings) => set({ dislikedThings }),
+  setSceneDescription: (sceneDescription) => set({ sceneDescription }),
+  setSceneImage: (sceneImage) => set({ sceneImage }),
   resetInput: () => set(initialInputState),
 
   // ── 분석 슬라이스 ──

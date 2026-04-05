@@ -27,30 +27,34 @@ export const ANALYSIS_SYSTEM_PROMPT = `당신은 고양이 행동 전문가입�
   "ownerRelationshipDetail": "집사와의 관계를 한 문장으로 설명"
 }`;
 
-/** 이미지 생성 프롬프트 템플릿 (PROMPT_ENGINEERING.md Step 3) */
-export const IMAGE_GENERATION_TEMPLATE = `Create an artistic painting in the style of Pablo Picasso's {picassoPeriod}.
+/** 이미지 생성 프롬프트 템플릿 — "고양이가 화가라면, 이 장면을 이렇게 그릴 거야!" */
+export const IMAGE_GENERATION_TEMPLATE = `You are painting AS a cat. This cat is a painter with a {temperament} personality — a "{personalityType}".
 
-Subject: A painting that captures the essence of a {personalityType} cat.
+Imagine: this cat picked up a brush and painted what it sees right now.
 
-Style guidelines:
-- Art style: {artStyleName}
+THE SCENE THE CAT IS LOOKING AT:
+{sceneDescription}
+
+HOW THIS CAT PAINTS (personality-driven style):
+- Art style: {artStyleName} — inspired by Picasso's {picassoPeriod}
 - {characteristics}
-- Inspired by Picasso's {picassoPeriod}
 - Style keywords: {promptKeywords}
+- The brushstrokes, composition, and energy reflect the cat's {temperament} personality
 
-Color palette (CRITICAL - Cat Vision Colors Only):
-- Primary: Blues (#4A90D9, #2E5FA1, #6BB3E0) — things the cat loves should be rendered in vivid blue
-- Secondary: Muted greens (#7BAE7F, #4A7C59)
-- Accent: Soft yellows (#D4C36A, #B8A93E)
-- NO vivid reds or oranges (cats cannot see these)
-- Replace reds with muted browns (#8B7D6B) — things the cat dislikes appear in these muted tones
-- Overall desaturated, pastel-like quality
-- This represents how a cat literally sees the world
+COLOR PALETTE (CRITICAL — Cat Dichromatic Vision):
+This painting uses ONLY colors a cat can actually see:
+- Blues (#4A90D9, #2E5FA1, #6BB3E0) — vivid and dominant. Things the cat LOVES appear in brilliant blue: {loves}
+- Greens (#7BAE7F, #4A7C59) — secondary, slightly muted
+- Yellows (#D4C36A, #B8A93E) — accents
+- NO reds or oranges — cats cannot see these. Replace with muted browns (#8B7D6B) and grays
+- Things the cat DISLIKES appear dull and faded: {dislikes}
+- Overall: desaturated, pastel-like, dreamlike quality
 
-Emotional color mapping:
-- Things the cat loves ({loves}) → render in vivid, saturated blues
-- Things the cat dislikes ({dislikes}) → render in muted grays and browns
+IMPORTANT:
+- This is NOT a painting OF a cat. This is a painting BY a cat — what the cat sees through its eyes.
+- The scene should be painted from a cat's low perspective (ground level, looking up at things)
+- Include subtle cat-like touches: a paw print in the corner, slightly tilted horizon, curious framing
 
 Mood: {keywords}
 
-The painting should feel as if the cat itself painted it — reflecting its {temperament} personality through brushstrokes, composition, and emotional energy. The artwork should be beautiful, expressive, and gallery-worthy.`;
+The result should be a beautiful, gallery-worthy artwork that makes people think "yes, this is exactly how a cat would paint this scene."`;

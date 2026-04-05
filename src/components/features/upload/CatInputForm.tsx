@@ -6,6 +6,7 @@ import { ImageUploader } from './ImageUploader';
 import { CatDescriptionForm } from './CatDescriptionForm';
 import { PersonalityTagSelector } from './PersonalityTagSelector';
 import { RelationshipInput } from './RelationshipInput';
+import { SceneInput } from './SceneInput';
 import { InputQualityGauge } from './InputQualityGauge';
 
 export function CatInputForm() {
@@ -39,6 +40,8 @@ export function CatInputForm() {
         <PersonalityTagSelector />
         <hr className="border-border" />
         <RelationshipInput />
+        <hr className="border-border" />
+        <SceneInput />
       </div>
 
       {analysisError && (

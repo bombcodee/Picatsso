@@ -22,4 +22,5 @@ export interface GeneratedArtwork {
 export interface ArtGenerationRequest {
   analysis: CatAnalysis;
   style: ArtStyle;
+  sceneDescription?: string;
 }

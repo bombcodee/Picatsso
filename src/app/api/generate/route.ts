@@ -5,8 +5,8 @@ import type { CatAnalysis } from '@/lib/types';
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json() as { analysis: CatAnalysis };
-    const { analysis } = body;
+    const body = await request.json() as { analysis: CatAnalysis; sceneDescription?: string };
+    const { analysis, sceneDescription } = body;
 
     if (!analysis?.temperament) {
       return NextResponse.json(
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
 
     const style = getArtStyleForAnalysis(analysis);
     const generator = new GeminiImageGenerator();
-    const artworks = await generator.generate({ analysis, style });
+    const artworks = await generator.generate({ analysis, style, sceneDescription });
 
     return NextResponse.json({ artworks });
   } catch (error) {

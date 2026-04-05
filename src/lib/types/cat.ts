@@ -33,6 +33,10 @@ export interface CatInput {
   relationshipDescription: string;
   favoriteThings: string;
   dislikedThings: string;
+  /** 고양이가 보는 장면 — 결과물 이미지의 주제가 됨 */
+  sceneDescription: string;
+  /** 고양이가 보는 장면 사진 (선택) */
+  sceneImage: File | null;
 }
 
 /** AI가 분석한 고양이 성격 결과 */

@@ -7,7 +7,8 @@ const STEPS = [
   { check: (s: StoreSnapshot) => s.description.trim().length > 20, label: '설명', message: '성격이 보이기 시작해요!' },
   { check: (s: StoreSnapshot) => s.tags.length > 0, label: '태그', message: '화풍 매칭이 정확해질 거예요' },
   { check: (s: StoreSnapshot) => s.relationshipDescription.trim().length > 10, label: '관계', message: '감정 색감까지 반영돼요!' },
-  { check: (s: StoreSnapshot) => s.favoriteThings.trim().length > 0 || s.dislikedThings.trim().length > 0, label: '취향', message: '완벽해요! 최고의 결과를 기대하세요' },
+  { check: (s: StoreSnapshot) => s.favoriteThings.trim().length > 0 || s.dislikedThings.trim().length > 0, label: '취향', message: '감정 색감이 풍부해져요!' },
+  { check: (s: StoreSnapshot) => s.sceneDescription.trim().length > 5, label: '장면', message: '완벽해요! 고양이가 멋진 그림을 그릴 거예요' },
 ];
 
 interface StoreSnapshot {
@@ -17,10 +18,11 @@ interface StoreSnapshot {
   relationshipDescription: string;
   favoriteThings: string;
   dislikedThings: string;
+  sceneDescription: string;
 }
 
-const EMOJIS = ['😺', '😸', '😻', '🎨', '✨'];
-const COLORS = ['#B8BCC0', '#D4C36A', '#7BAE7F', '#4A90D9', '#2E5FA1'];
+const EMOJIS = ['😺', '😸', '😻', '🎨', '🖌️', '✨'];
+const COLORS = ['#B8BCC0', '#D4C36A', '#7BAE7F', '#4A90D9', '#2E5FA1', '#1E3A5F'];
 
 export function InputQualityGauge() {
   const store = usePicatssoStore();
@@ -31,6 +33,7 @@ export function InputQualityGauge() {
     relationshipDescription: store.relationshipDescription,
     favoriteThings: store.favoriteThings,
     dislikedThings: store.dislikedThings,
+    sceneDescription: store.sceneDescription,
   };
 
   const completed = STEPS.filter((step) => step.check(snapshot)).length;

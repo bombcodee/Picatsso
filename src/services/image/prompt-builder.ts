@@ -1,12 +1,16 @@
 import type { CatAnalysis, ArtStyle } from '@/lib/types';
 import { IMAGE_GENERATION_TEMPLATE, TEMPERAMENT_TO_ART_STYLE } from '@/lib/constants';
 
-/** 분석 결과 → 이미지 생성 프롬프트 조립 */
-export function buildImagePrompt(analysis: CatAnalysis): string {
+/** 분석 결과 + 장면 설명 → 이미지 생성 프롬프트 조립 */
+export function buildImagePrompt(analysis: CatAnalysis, sceneDescription?: string): string {
   const style: ArtStyle = TEMPERAMENT_TO_ART_STYLE[analysis.temperament];
 
   let prompt = IMAGE_GENERATION_TEMPLATE;
 
+  const scene = sceneDescription?.trim()
+    || '집 안 거실에서 창밖을 바라보고 있다. 따뜻한 햇살이 들어오는 오후.';
+
+  prompt = prompt.replace(/{sceneDescription}/g, scene);
   prompt = prompt.replace(/{picassoPeriod}/g, style.picassoPeriod);
   prompt = prompt.replace(/{personalityType}/g, analysis.personalityType);
   prompt = prompt.replace(/{artStyleName}/g, style.name);

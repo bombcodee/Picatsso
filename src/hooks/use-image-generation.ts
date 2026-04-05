@@ -7,7 +7,7 @@ import type { GeneratedArtwork } from '@/lib/types';
 /** 아트워크 이미지 생성 API 호출 훅 */
 export function useImageGeneration() {
   const {
-    analysis,
+    analysis, sceneDescription,
     setArtworks, setGenerationLoading, setGenerationError, goToStep,
   } = usePicatssoStore();
 
@@ -25,7 +25,7 @@ export function useImageGeneration() {
       const response = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ analysis }),
+        body: JSON.stringify({ analysis, sceneDescription }),
       });
 
       if (!response.ok) {
@@ -42,7 +42,7 @@ export function useImageGeneration() {
       setGenerationError(message);
       goToStep(3); // 분석 결과로 돌아감
     }
-  }, [analysis, setArtworks, setGenerationLoading, setGenerationError, goToStep]);
+  }, [analysis, sceneDescription, setArtworks, setGenerationLoading, setGenerationError, goToStep]);
 
   return { generate };
 }

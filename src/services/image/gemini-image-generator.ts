@@ -13,7 +13,7 @@ export class GeminiImageGenerator implements ImageGenerator {
   }
 
   async generate(request: ArtGenerationRequest): Promise<GeneratedArtwork[]> {
-    const prompt = buildImagePrompt(request.analysis);
+    const prompt = buildImagePrompt(request.analysis, request.sceneDescription);
     const style = getArtStyleForAnalysis(request.analysis);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
