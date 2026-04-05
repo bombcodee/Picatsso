@@ -34,14 +34,13 @@ export function CatInputForm() {
 
       <div className="space-y-6 bg-white rounded-2xl p-6 shadow-sm border">
         <ImageUploader />
+        <SceneInput />
         <hr className="border-border" />
         <CatDescriptionForm />
         <hr className="border-border" />
         <PersonalityTagSelector />
         <hr className="border-border" />
         <RelationshipInput />
-        <hr className="border-border" />
-        <SceneInput />
       </div>
 
       {analysisError && (
