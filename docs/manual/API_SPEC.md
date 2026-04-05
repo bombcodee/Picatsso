@@ -1,6 +1,7 @@
 # Picatsso - API Specification (API 스펙)
 
 > Next.js API Routes 엔드포인트 명세
+> 사용 모델: gemini-2.5-flash (분석) / gemini-2.5-flash-image (이미지생성, 나노바나나)
 
 ---
 
@@ -9,7 +10,6 @@
 고양이 성격 분석 요청
 
 ### Request
-
 - **Content-Type:** `multipart/form-data`
 
 | 필드 | 타입 | 필수 | 설명 |
@@ -22,7 +22,6 @@
 | `dislikedThings` | string | 선택 | 싫어하는 것 |
 
 ### Response (200)
-
 ```json
 {
   "personalityType": "장난꾸러기 탐험가",
@@ -42,14 +41,6 @@
 }
 ```
 
-### Error Response (500)
-
-```json
-{
-  "error": "고양이 분석 중 문제가 발생했습니다. 다시 시도해주세요."
-}
-```
-
 ---
 
 ## POST /api/generate
@@ -57,39 +48,28 @@
 아트워크 이미지 생성 요청
 
 ### Request
-
 - **Content-Type:** `application/json`
 
 ```json
 {
-  "analysis": {
-    "personalityType": "장난꾸러기 탐험가",
-    "keywords": ["활발한", "호기심", "사교적"],
-    "energyLevel": "high",
-    "temperament": "playful",
-    "artStyleSuggestion": "...",
-    "description": "...",
-    "emotionalColorMap": {
-      "loves": ["츄르"],
-      "likes": ["캣타워"],
-      "neutral": ["소파"],
-      "dislikes": ["목욕"]
-    },
-    "ownerRelationship": "close",
-    "ownerRelationshipDetail": "..."
-  }
+  "analysis": { ... CatAnalysis 객체 ... },
+  "sceneDescription": "창밖의 비 오는 거리를 바라보고 있어요"
 }
 ```
 
-### Response (200)
+| 필드 | 타입 | 필수 | 설명 |
+|------|------|------|------|
+| `analysis` | CatAnalysis | 필수 | /api/analyze의 응답 결과 |
+| `sceneDescription` | string | 선택 | 고양이가 보고 있는 장면 설명 (없으면 기본 장면 적용) |
 
+### Response (200)
 ```json
 {
   "artworks": [
     {
       "id": "artwork-1712345678-0",
-      "imageBase64": "data:image/png;base64,iVBORw0KGgo...",
-      "prompt": "Create an artistic painting in the style of...",
+      "imageBase64": "data:image/png;base64,...",
+      "prompt": "You are painting AS a cat...",
       "style": {
         "name": "다이내믹 표현주의",
         "picassoPeriod": "아프리카 미술 영향기",
@@ -97,29 +77,9 @@
         "promptKeywords": ["dynamic expressionism", "..."],
         "temperament": "playful"
       },
-      "createdAt": "2026-04-05T12:00:00.000Z"
-    },
-    {
-      "id": "artwork-1712345678-1",
-      "imageBase64": "data:image/png;base64,..."
+      "createdAt": "2026-04-06T12:00:00.000Z"
     }
   ]
-}
-```
-
-### Error Response (400)
-
-```json
-{
-  "error": "분석 결과가 올바르지 않습니다."
-}
-```
-
-### Error Response (500)
-
-```json
-{
-  "error": "아트워크 생성 중 문제가 발생했습니다. 다시 시도해주세요."
 }
 ```
 
@@ -127,11 +87,12 @@
 
 ## 공통 사항
 
-- **인증:** MVP에서는 미구현 (공개 API)
-- **Rate Limit:** MVP에서는 미구현 (Gemini 무료 티어 ~500장/일에 의존)
-- **API 키:** 서버 사이드에서만 사용 (`.env.local`의 `GEMINI_API_KEY`)
-- **타임아웃:** Vercel Hobby 플랜 기준 10초. 이미지 생성 시 주의 필요
+- **인증:** MVP 미구현 (공개 API)
+- **Rate Limit:** Gemini API 종량제 (Google Cloud 결제 설정 완료, $300 크레딧)
+- **API 키:** 서버 사이드 전용 (`.env.local` → `GEMINI_API_KEY`)
+- **이미지 생성 수:** 1회 요청 시 2개 생성
+- **프롬프트 특징:** 고양이 시점 ("고양이가 그린 그림"), 파레이돌리아 효과
 
 ---
 
-> 마지막 동기화: 2026-04-05 (M1 완료 시점)
+> 마지막 동기화: 2026-04-06

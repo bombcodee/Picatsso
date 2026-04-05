@@ -105,33 +105,35 @@
 
 ---
 
-## Step 3: 이미지 생성 프롬프트 템플릿 (초안)
+## Step 3: 이미지 생성 프롬프트 (현재 적용 중)
+
+> 실제 코드: `src/lib/constants/prompts.ts`의 `IMAGE_GENERATION_TEMPLATE`
+> 프롬프트 언어: 영어 (이미지 생성 품질 우선) + 한국어 주석 (관리용)
+
+### 프롬프트 구조 (6개 섹션)
+
+| 섹션 | 역할 | 핵심 |
+|------|------|------|
+| **SCENE** | 뭘 그릴지 | 장면 설명만 (다른 물체 추가 금지) |
+| **CRITICAL RULES** | 절대 규칙 | 장면 외 물체 그리기 금지, 고양이 시점 |
+| **STYLE** | 어떻게 그릴지 | 성격→화풍 (피카소 시기별) |
+| **COLOR** | 무슨 색으로 | 고양이 이색형 시각 (파란/녹/노란, 빨강 금지) |
+| **EMOTION** | 감정 표현 | 파레이돌리아 효과 |
+| **MOOD** | 분위기 | 성격 키워드 |
+
+### 파레이돌리아 효과 (핵심 차별점)
+
+좋아하는 것을 **직접 그리지 않고**, 장면 속 자연물이 그 형태를 **은근히 닮도록** 한다.
 
 ```
-Create an artistic painting in the style of {art_style}.
-
-Subject: A painting that captures the essence of a {personality_type} cat.
-
-Style guidelines:
-- Inspired by Pablo Picasso's {picasso_period} period
-- {style_specific_instructions}
-
-Color palette (CRITICAL - Cat Vision Colors Only):
-- Primary: Blues (#4A90D9, #2E5FA1, #6BB3E0)
-- Secondary: Muted greens (#7BAE7F, #4A7C59)
-- Accent: Soft yellows (#D4C36A, #B8A93E)
-- NO vivid reds or oranges (cats cannot see these)
-- Replace reds with muted browns (#8B7D6B)
-- Overall desaturated, pastel-like quality
-- This represents how a cat literally sees the world
-
-Mood: {mood_keywords}
-Composition: {composition_guidelines}
-
-The painting should feel as if the cat itself painted it -
-reflecting the cat's {temperament} personality through brushstrokes,
-composition, and emotional energy.
+좋아하는 강도         → 표현 방식
+─────────            ────────────────
+보통 좋아함          → 색감만 반영 (파란 톤이 따뜻해짐)
+많이 좋아함          → 그림자/구름이 좋아하는 것의 형태를 살짝 닮음
+집착 수준           → 환각처럼 뚜렷하게 보임 (구름이 대놓고 츄르 모양)
 ```
+
+싫어하는 것도 직접 그리지 않고, 흐릿하고 어두운 구석에 불안한 형태로 살짝 암시만.
 
 ---
 
@@ -170,4 +172,8 @@ export const CAT_VISION_PALETTE = {
 
 | 날짜 | 변경 내용 | 이유 | 결과 |
 |------|-----------|------|------|
-| — | 초안 작성 | 프로젝트 시작 | 개발 시 테스트 예정 |
+| 2026-04-05 | 초안 작성 | 프로젝트 시작 | 기본 프롬프트 동작 확인 |
+| 2026-04-06 | 고양이 시점으로 전환 | "고양이를 그린 그림"→"고양이가 그린 그림" | 컨셉 정립 |
+| 2026-04-06 | 파레이돌리아 효과 추가 | 좋아하는 것 직접 그리면 재미 없음 | 자연물에 형태 닮기로 변경 |
+| 2026-04-06 | CRITICAL RULES 섹션 추가 | 테스트 시 설명의 물체까지 그려버림 | 장면 외 물체 추가 금지 명시 |
+| 2026-04-06 | 영어 프롬프트 + 한국어 주석 | 이미지 생성은 영어가 품질 좋음 | 관리용 한국어 주석 병행 |

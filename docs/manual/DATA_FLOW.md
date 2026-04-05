@@ -7,14 +7,17 @@
 ## 전체 플로우
 
 ```
-사용자 (브라우저)                    서버 (Next.js API Routes)             외부 API (Gemini)
-─────────────────                  ─────────────────────────            ──────────────────
+사용자 (브라우저)                    서버 (API Routes)                외부 API (Gemini)
+─────────────────                  ─────────────────                ──────────────────
 
 1. 고양이 정보 입력
-   ├── 사진 1~3장 (File[])
-   ├── 텍스트 설명
+   ├── 고양이 사진 1~3장 (특성 분석용)
+   ├── 장면 사진 (선택, 그림의 주제)
+   ├── 장면 설명 텍스트
+   ├── 고양이 설명 텍스트
    ├── 성격 태그 선택
-   └── 집사-고양이 관계
+   ├── 집사-고양이 관계
+   └── 좋아하는것 / 싫어하는것
          │
          │  FormData (POST)
          ▼
@@ -23,47 +26,41 @@
                                       ├── 이미지 → base64 변환
                                       └── GeminiAnalyzer.analyze()
                                               │
-                                              │  이미지(base64) + 프롬프트
                                               ▼
-                                                                          3. Gemini Vision API
-                                                                             ├── 사진 분석
-                                                                             ├── 텍스트 이해
-                                                                             └── JSON 응답 생성
+                                                                    3. Gemini 2.5 Flash
+                                                                       (텍스트/비전)
+                                                                       → JSON 응답
                                               │
-                                              │  CatAnalysis (JSON)
                                               ▼
-                                   4. JSON 응답 반환
+                                   4. CatAnalysis JSON 반환
          │
-         │  CatAnalysis
          ▼
 5. 분석 결과 화면 표시
    ├── 성격 유형 + 키워드
-   ├── 매칭 화풍 미리보기
-   └── 감정 색감 맵 시각화
+   ├── 매칭 화풍 (피카소 시기)
+   ├── 감정 색감 맵 시각화
+   └── 집사 관계 표시
          │
-         │  "그림 그리기" 버튼 클릭
-         │  JSON (POST)
+         │  "그림 그리기" 클릭
+         │  JSON (POST) { analysis, sceneDescription }
          ▼
                                    6. /api/generate
-                                      ├── CatAnalysis 수신
-                                      ├── ArtStyle 매핑
+                                      ├── CatAnalysis + sceneDescription 수신
                                       ├── promptBuilder로 프롬프트 조립
-                                      │   ├── 화풍 키워드 삽입
-                                      │   ├── 감정 색감 반영
-                                      │   └── 고양이 시각 팔레트 적용
+                                      │   ├── 장면만 그리기 (CRITICAL RULE)
+                                      │   ├── 성격 → 화풍 키워드
+                                      │   ├── 고양이 시각 색감
+                                      │   └── 파레이돌리아 효과 (감정 표현)
                                       └── GeminiImageGenerator.generate()
                                               │
-                                              │  프롬프트 텍스트
                                               ▼
-                                                                          7. Gemini Image API
-                                                                             ├── 프롬프트 해석
-                                                                             └── 이미지 생성 (x2)
+                                                                    7. Gemini 2.5 Flash Image
+                                                                       (나노바나나)
+                                                                       → base64 이미지 x2
                                               │
-                                              │  base64 이미지 데이터
                                               ▼
                                    8. GeneratedArtwork[] 응답
          │
-         │  GeneratedArtwork[]
          ▼
 9. 결과 화면 표시
    ├── 아트워크 갤러리 (2개)
@@ -73,52 +70,45 @@
 
 ---
 
-## 데이터 타입 흐름
+## 프롬프트 조립 흐름 (핵심)
 
 ```
-CatInput (사용자 입력)
+CatAnalysis (분석 결과)
     │
-    │  /api/analyze
-    ▼
-CatAnalysis (AI 분석 결과)
+    ├── temperament → TEMPERAMENT_TO_ART_STYLE → 화풍 결정
+    ├── keywords → 분위기 키워드
+    ├── emotionalColorMap.loves → 파레이돌리아 대상 (직접 안 그림)
+    ├── emotionalColorMap.dislikes → 흐릿한 구석 암시
     │
-    │  + TEMPERAMENT_TO_ART_STYLE 매핑
-    ▼
-ArtGenerationRequest (분석 + 스타일)
+    + sceneDescription (장면 설명)
     │
-    │  + promptBuilder → 프롬프트 조립
-    │  /api/generate
     ▼
-GeneratedArtwork[] (생성된 이미지들)
+buildImagePrompt()
     │
-    │  브라우저에서 표시 + 다운로드
     ▼
-사용자에게 전달
-```
-
----
-
-## 감정 색감 시스템 데이터 흐름
-
-```
-집사 입력                    AI 분석                     프롬프트 반영
-─────────                   ─────────                   ──────────────
-
-"츄르 좋아해요"         →   loves: ["츄르"]          →   "츄르 = vivid blue (#4A90D9)"
-"캣타워 좋아해"         →   likes: ["캣타워"]        →   "캣타워 = green (#7BAE7F)"
-"목욕 싫어해요"         →   dislikes: ["목욕"]       →   "목욕 = muted gray (#8B7D6B)"
-"집사랑 친해요"         →   ownerRelationship:       →   "집사 = vivid blue"
-                            "close"
+"이 고양이가 화가로서 이 장면을 그린다면?"
+    ├── 장면만 그림 (설명/취향의 물체 추가 금지)
+    ├── 고양이 낮은 시점 (ground level)
+    ├── 성격이 붓터치/구도/에너지에 반영
+    ├── 고양이 시각 색감 (파란/녹/노란, 빨강 금지)
+    └── 파레이돌리아: 좋아하는 것 형태가 자연물에 은근히 닮음
 ```
 
 ---
 
-## 상태 관리 흐름 (Zustand 스토어)
+## Zustand 스토어 구조
 
 ```
 usePicatssoStore
 ├── 입력 슬라이스
-│   └── catInput → setImages/setDescription/setTags/setRelationship
+│   ├── images: File[]              (고양이 사진)
+│   ├── sceneImage: File | null     (장면 사진)
+│   ├── sceneDescription: string    (장면 설명)
+│   ├── description: string         (고양이 설명)
+│   ├── tags: string[]              (성격 태그)
+│   ├── relationshipDescription     (집사 관계)
+│   ├── favoriteThings              (좋아하는 것)
+│   └── dislikedThings              (싫어하는 것)
 │
 ├── 분석 슬라이스
 │   └── analysis / analysisLoading / analysisError
@@ -128,14 +118,9 @@ usePicatssoStore
 │
 └── 플로우 슬라이스
     └── currentStep (0→1→2→3→4→5)
-        0: 랜딩
-        1: 입력
-        2: 분석 중 (로딩)
-        3: 분석 결과
-        4: 생성 중 (로딩)
-        5: 최종 결과
+        0: 랜딩  1: 입력  2: 분석중  3: 분석결과  4: 생성중  5: 결과
 ```
 
 ---
 
-> 마지막 동기화: 2026-04-05 (M1 완료 시점)
+> 마지막 동기화: 2026-04-06
