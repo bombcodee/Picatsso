@@ -7,7 +7,9 @@
       "Bash(cp -r picatsso-temp/src picatsso-temp/public picatsso-temp/package.json picatsso-temp/package-lock.json picatsso-temp/tsconfig.json picatsso-temp/next.config.ts picatsso-temp/next-env.d.ts picatsso-temp/postcss.config.mjs picatsso-temp/eslint.config.mjs Picatsso/)",
       "Bash(cp picatsso-temp/AGENTS.md Picatsso/)",
       "Bash(npm install:*)",
-      "Bash(npx shadcn@latest init -y --defaults)"
+      "Bash(npx shadcn@latest init -y --defaults)",
+      "Bash(npx shadcn@latest add input textarea badge card dialog tabs --yes)",
+      "Bash(npx next:*)"
     ],
     "additionalDirectories": [
       "C:\\Users\\JOOHO\\.claude\\plans",
