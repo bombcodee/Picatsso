@@ -15,7 +15,7 @@ export function ArtStylePreview() {
       <div>
         <p className="text-lg font-bold">{style.name}</p>
         <p className="text-sm text-muted-foreground">
-          피카소의 <strong>{style.picassoPeriod}</strong>에서 영감
+          피카소의 큐비즘을 베이스로 한 독자적 화풍
         </p>
       </div>
       <p className="text-sm text-muted-foreground">{style.characteristics}</p>

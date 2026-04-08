@@ -15,7 +15,8 @@
 - `docs/prompt-management/artist-reference.html` — 화가별 시기/기법/키워드 레퍼런스
 - `docs/prompt-management/discussion-log.html` — 프롬프트 토의 로그 + 결정 사항
 - `docs/MEMORY.md` — 세션 연속성 메모리 (진행 상황 요약)
-- `docs/manual/ARCHITECTURE.md` — 아키텍처 + 파일 구조 + 어댑터 교체 가이드
+- `docs/manual/ARCHITECTURE.md` — 아키텍처 + 파일 구조 + 폴더 의미 + 어댑터 교체 가이드
+- `docs/manual/visual-guide.html` — 시각화 매뉴얼 (프로세스 흐름도, 프롬프트 조립, 모듈 관계)
 - `docs/manual/DATA_FLOW.md` — 데이터 흐름도
 - `docs/manual/API_SPEC.md` — API 엔드포인트 스펙
 - `docs/manual/SETUP_GUIDE.md` — 환경 설정 가이드
@@ -55,6 +56,20 @@ ROADMAP Phase에 태스크 배치  ← "언제 만든다" 실행 계획
 
 - 🔒 사용자 승인 없이 PRD 수정 금지
 - 🔄 토의 결과는 성격에 따라 적절한 문서에 정리 (ROADMAP, PRD, CONVENTIONS, REFERENCES 등)
+
+### 프롬프트 관리 흐름
+```
+프롬프트 토의 → discussion-log.html (토의 기록)
+                    → artist-reference.html (화가별 키워드/기법 확정)
+                    → PROMPT_ENGINEERING.md (프롬프트 설계 반영)
+                    → prompts.ts (코드 구현)
+```
+| 파일 | 수정 시점 |
+|------|----------|
+| `discussion-log.html` | 프롬프트 관련 토의가 발생할 때 |
+| `artist-reference.html` | 토의 결과로 화가별 키워드/기법이 확정될 때 |
+| `PROMPT_ENGINEERING.md` | 확정된 키워드가 프롬프트 설계에 반영될 때 |
+| `prompts.ts` | 최종 코드 구현 시 |
 
 ---
 

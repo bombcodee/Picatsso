@@ -33,7 +33,7 @@ export function ArtworkCard({ artwork, index }: ArtworkCardProps) {
       {/* 정보 */}
       <div className="p-4">
         <p className="text-sm font-medium">{artwork.style.name}</p>
-        <p className="text-xs text-muted-foreground">{artwork.style.picassoPeriod}</p>
+        <p className="text-xs text-muted-foreground">{artwork.style.characteristics}</p>
       </div>
     </div>
   );

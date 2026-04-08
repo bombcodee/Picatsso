@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Picatsso — 시각화 매뉴얼</title>
+  <style>
+    :root {
+      --blue: #4A90D9;
+      --blue-light: #6BB3E0;
+      --green: #7BAE7F;
+      --yellow: #D4C36A;
+      --muted: #8B7D6B;
+      --bg: #fafafa;
+      --card: #ffffff;
+      --border: #e5e7eb;
+      --text: #1f2937;
+      --text-muted: #6b7280;
+      --accent: #4A90D9;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+    /* 네비게이션 */
+    .nav { position: sticky; top: 0; background: white; border-bottom: 2px solid var(--blue); padding: 0.75rem 2rem; z-index: 100; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+    .nav-title { font-weight: 800; font-size: 1.1rem; background: linear-gradient(135deg, var(--blue), var(--green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav a { text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 500; padding: 0.3rem 0.6rem; border-radius: 4px; transition: all 0.2s; }
+    .nav a:hover { background: var(--blue); color: white; }
+
+    /* 공통 */
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+    section { margin-bottom: 3rem; }
+    h2 { font-size: 1.5rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border); }
+    h2 span { color: var(--blue); }
+    h3 { font-size: 1.1rem; margin: 1.5rem 0 0.75rem; color: var(--text); }
+    p.desc { color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem; }
+
+    /* 플로우 다이어그램 */
+    .flow { display: flex; align-items: stretch; gap: 0; flex-wrap: wrap; justify-content: center; margin: 1.5rem 0; }
+    .flow-box { background: var(--card); border: 2px solid var(--border); border-radius: 10px; padding: 1rem; min-width: 140px; max-width: 180px; text-align: center; position: relative; }
+    .flow-box h4 { font-size: 0.8rem; margin-bottom: 0.3rem; }
+    .flow-box p { font-size: 0.7rem; color: var(--text-muted); }
+    .flow-box.blue { border-color: var(--blue); background: #f0f7ff; }
+    .flow-box.green { border-color: var(--green); background: #f0faf0; }
+    .flow-box.yellow { border-color: var(--yellow); background: #fefce8; }
+    .flow-box.muted { border-color: var(--muted); background: #f5f0eb; }
+    .flow-box .emoji { font-size: 1.5rem; display: block; margin-bottom: 0.3rem; }
+    .flow-arrow { display: flex; align-items: center; font-size: 1.5rem; color: var(--text-muted); padding: 0 0.3rem; min-width: 30px; justify-content: center; }
+
+    /* 프로세스 상세 */
+    .process { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    .process-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+    .process-num { background: var(--blue); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; flex-shrink: 0; }
+    .process-num.green-bg { background: var(--green); }
+    .process-title { font-weight: 700; font-size: 1rem; }
+    .process-subtitle { font-size: 0.8rem; color: var(--text-muted); }
+
+    /* 파일 흐름 */
+    .file-flow { display: flex; flex-direction: column; gap: 0.5rem; margin: 1rem 0; }
+    .file-step { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.6rem 0.8rem; background: var(--bg); border-radius: 8px; border-left: 3px solid var(--border); }
+    .file-step.active { border-left-color: var(--blue); background: #f0f7ff; }
+    .file-step.active-green { border-left-color: var(--green); background: #f0faf0; }
+    .file-step code { font-size: 0.75rem; font-weight: 600; color: var(--blue); white-space: nowrap; min-width: 200px; }
+    .file-step .role { font-size: 0.8rem; color: var(--text-muted); }
+
+    /* 모듈 관계도 */
+    .module-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; margin: 1rem 0; }
+    .module-layer { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; }
+    .module-layer-title { font-size: 0.8rem; font-weight: 700; color: white; background: var(--blue); display: inline-block; padding: 0.15rem 0.6rem; border-radius: 4px; margin-bottom: 0.5rem; }
+    .module-layer-title.green { background: var(--green); }
+    .module-layer-title.yellow { background: var(--yellow); color: var(--text); }
+    .module-layer-title.muted { background: var(--muted); }
+    .module-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .module-item { background: var(--bg); padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; border: 1px solid var(--border); }
+    .module-item code { font-size: 0.7rem; color: var(--blue); }
+    .layer-arrow { text-align: center; font-size: 1.2rem; color: var(--text-muted); padding: 0.25rem 0; }
+
+    /* 프롬프트 조립 */
+    .prompt-assembly { background: var(--card); border: 2px solid var(--blue); border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+    .prompt-assembly h4 { color: var(--blue); margin-bottom: 1rem; }
+    .prompt-block { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.5rem; margin: 0.4rem 0; border-radius: 6px; }
+    .prompt-block.base { background: #dbeafe; }
+    .prompt-block.science { background: #dcfce7; }
+    .prompt-block.personality { background: #fef3c7; }
+    .prompt-block.user { background: #f3e8ff; }
+    .prompt-block.emotion { background: #fce7f3; }
+    .prompt-tag { font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 3px; white-space: nowrap; }
+    .prompt-tag.base { background: var(--blue); color: white; }
+    .prompt-tag.science { background: var(--green); color: white; }
+    .prompt-tag.personality { background: var(--yellow); color: var(--text); }
+    .prompt-tag.user { background: #a855f7; color: white; }
+    .prompt-tag.emotion { background: #ec4899; color: white; }
+    .prompt-desc { font-size: 0.8rem; color: var(--text-muted); }
+
+    /* 성격 악센트 테이블 */
+    .accent-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.8rem; }
+    .accent-table th { background: var(--blue); color: white; padding: 0.5rem; text-align: left; }
+    .accent-table td { padding: 0.5rem; border-bottom: 1px solid var(--border); }
+    .accent-table tr:nth-child(even) { background: #f9fafb; }
+    .accent-table .label { font-weight: 600; }
+
+    /* 폴더 의미 */
+    .folder-card { display: grid; grid-template-columns: 120px 1fr; gap: 0.75rem; padding: 0.75rem; background: var(--card); border: 1px solid var(--border); border-radius: 8px; margin: 0.5rem 0; align-items: center; }
+    .folder-card .name { font-weight: 700; font-size: 0.85rem; color: var(--blue); }
+    .folder-card .meaning { font-size: 0.8rem; color: var(--text-muted); }
+
+    /* 어댑터 패턴 */
+    .adapter-box { display: flex; gap: 1rem; flex-wrap: wrap; margin: 1rem 0; }
+    .adapter-card { flex: 1; min-width: 200px; background: var(--card); border: 2px dashed var(--border); border-radius: 10px; padding: 1rem; text-align: center; }
+    .adapter-card h4 { font-size: 0.85rem; margin-bottom: 0.3rem; }
+    .adapter-card .interface { background: var(--green); color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; display: inline-block; margin-bottom: 0.3rem; }
+    .adapter-card .impl { background: var(--bg); border: 1px solid var(--border); padding: 0.3rem 0.5rem; border-radius: 4px; font-size: 0.7rem; margin: 0.2rem 0; }
+    .adapter-card .swap { color: var(--text-muted); font-size: 0.7rem; margin-top: 0.5rem; font-style: italic; }
+
+    /* 문서 지도 */
+    .doc-map { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.75rem; margin: 1rem 0; }
+    .doc-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem; }
+    .doc-card .doc-name { font-weight: 600; font-size: 0.8rem; margin-bottom: 0.2rem; }
+    .doc-card .doc-role { font-size: 0.75rem; color: var(--text-muted); }
+    .doc-card.blue-accent { border-left: 3px solid var(--blue); }
+    .doc-card.green-accent { border-left: 3px solid var(--green); }
+    .doc-card.yellow-accent { border-left: 3px solid var(--yellow); }
+    .doc-card.muted-accent { border-left: 3px solid var(--muted); }
+
+    @media (max-width: 768px) {
+      .container { padding: 1rem; }
+      .flow { flex-direction: column; align-items: center; }
+      .flow-arrow { transform: rotate(90deg); padding: 0.3rem 0; }
+      .folder-card { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 네비게이션 -->
+<div class="nav">
+  <span class="nav-title">Picatsso 시각화 매뉴얼</span>
+  <a href="#user-flow">사용자 플로우</a>
+  <a href="#ai-process">AI 프로세스</a>
+  <a href="#prompt-assembly">프롬프트 조립</a>
+  <a href="#accents">성격 악센트</a>
+  <a href="#layers">레이어 구조</a>
+  <a href="#folders">폴더 의미</a>
+  <a href="#adapters">어댑터 패턴</a>
+  <a href="#docs">문서 지도</a>
+</div>
+
+<div class="container">
+
+<!-- ===== 1. 사용자 플로우 ===== -->
+<section id="user-flow">
+  <h2><span>1.</span> 사용자 플로우 — 6단계</h2>
+  <p class="desc">사용자가 보는 화면 흐름. 싱글 페이지에서 단계별로 전환됩니다.</p>
+
+  <div class="flow">
+    <div class="flow-box blue">
+      <span class="emoji">🏠</span>
+      <h4>0. 랜딩</h4>
+      <p>서비스 소개 + 시작 버튼</p>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box green">
+      <span class="emoji">📝</span>
+      <h4>1. 입력</h4>
+      <p>사진 + 설명 + 태그 + 장면</p>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box yellow">
+      <span class="emoji">🔍</span>
+      <h4>2. 분석 중</h4>
+      <p>1차 AI 호출 (로딩)</p>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box blue">
+      <span class="emoji">🐱</span>
+      <h4>3. 분석 결과</h4>
+      <p>성격 + 화풍 + 감정 색감</p>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box yellow">
+      <span class="emoji">🎨</span>
+      <h4>4. 생성 중</h4>
+      <p>2차 AI 호출 (로딩)</p>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box green">
+      <span class="emoji">🖼️</span>
+      <h4>5. 결과</h4>
+      <p>아트워크 2장 + 다운로드</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 2. AI 프로세스 상세 ===== -->
+<section id="ai-process">
+  <h2><span>2.</span> AI 프로세스 — 파일별 역할</h2>
+  <p class="desc">2번의 AI 호출이 어떤 파일을 거쳐서 진행되는지 보여줍니다.</p>
+
+  <!-- 1차 -->
+  <div class="process">
+    <div class="process-header">
+      <div class="process-num">1</div>
+      <div>
+        <div class="process-title">성격 분석 (텍스트 → JSON)</div>
+        <div class="process-subtitle">모델: gemini-2.5-flash</div>
+      </div>
+    </div>
+    <div class="file-flow">
+      <div class="file-step active">
+        <code>use-cat-analysis.ts</code>
+        <span class="role"><strong>택배기사</strong> — 사용자 입력을 FormData로 묶어서 서버에 전달</span>
+      </div>
+      <div class="file-step">
+        <code>api/analyze/route.ts</code>
+        <span class="role"><strong>접수처</strong> — FormData 받아서 이미지를 base64로 변환, GeminiAnalyzer에 넘김</span>
+      </div>
+      <div class="file-step active">
+        <code>gemini-analyzer.ts</code>
+        <span class="role"><strong>실행자</strong> — ANALYSIS_SYSTEM_PROMPT + 사진 + 입력값을 Gemini에 보냄</span>
+      </div>
+      <div class="file-step active-green">
+        <code>prompts.ts</code>
+        <span class="role"><strong>레시피</strong> — ANALYSIS_SYSTEM_PROMPT 제공 ("고양이 행동 전문가로서 분석해줘")</span>
+      </div>
+    </div>
+    <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.5rem;">
+      <strong>결과:</strong> <code>{ temperament: "curious", loves: ["츄르"], keywords: [...], ... }</code> ← 이 JSON이 2차 호출의 재료가 됨
+    </p>
+  </div>
+
+  <!-- 2차 -->
+  <div class="process">
+    <div class="process-header">
+      <div class="process-num green-bg">2</div>
+      <div>
+        <div class="process-title">이미지 생성 (텍스트 → 그림)</div>
+        <div class="process-subtitle">모델: gemini-2.5-flash-image</div>
+      </div>
+    </div>
+    <div class="file-flow">
+      <div class="file-step active">
+        <code>use-image-generation.ts</code>
+        <span class="role"><strong>택배기사</strong> — 1차 분석 결과 + 장면 설명을 서버에 전달</span>
+      </div>
+      <div class="file-step">
+        <code>api/generate/route.ts</code>
+        <span class="role"><strong>접수처</strong> — 분석결과에서 ArtStyle 매칭, GeminiImageGenerator에 넘김</span>
+      </div>
+      <div class="file-step active-green">
+        <code>prompt-builder.ts</code>
+        <span class="role"><strong>레시피 조합사</strong> — 6가지 재료를 빈칸에 끼워 넣어 최종 프롬프트 완성 (아래 상세)</span>
+      </div>
+      <div class="file-step active">
+        <code>gemini-image-generator.ts</code>
+        <span class="role"><strong>실행자</strong> — 완성된 프롬프트를 Gemini Image에 보내고 그림 2장 받음</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3. 프롬프트 조립 ===== -->
+<section id="prompt-assembly">
+  <h2><span>3.</span> 프롬프트 조립 — 레고 블록 구조</h2>
+  <p class="desc">prompt-builder.ts가 여러 독립 블록을 하나의 최종 프롬프트로 조립합니다. 각 블록은 독립적으로 교체 가능.</p>
+
+  <div class="prompt-assembly">
+    <h4>IMAGE_GENERATION_TEMPLATE (조립 틀)</h4>
+    <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:1rem;">
+      플레이스홀더({cubismBase}, {moodKeywords} 등)가 있는 영어 템플릿. prompt-builder가 빈칸을 채움.
+    </p>
+
+    <div class="prompt-block base">
+      <span class="prompt-tag base">공통 베이스</span>
+      <span class="prompt-desc"><strong>CUBISM_BASE_BLOCK</strong> — 피카소 큐비즘 화법 (굵은 윤곽선, 면 분할, 다중 시점). 모든 그림에 항상 적용.</span>
+    </div>
+    <div class="prompt-block science">
+      <span class="prompt-tag science">과학 연결</span>
+      <span class="prompt-desc"><strong>CAT_PICASSO_CONNECTION</strong> — 고양이 시각의 과학적 사실 (시야각 200°, 이색형 색각, 야간시력)이 왜 큐비즘과 맞는지 설명.</span>
+    </div>
+    <div class="prompt-block personality">
+      <span class="prompt-tag personality">성격 악센트</span>
+      <span class="prompt-desc"><strong>moodKeywords + characteristics</strong> — 성격별 분위기 키워드. personality-mapping.ts에서 가져옴. (아래 테이블 참고)</span>
+    </div>
+    <div class="prompt-block user">
+      <span class="prompt-tag user">사용자 입력</span>
+      <span class="prompt-desc"><strong>sceneDescription, personalityType, keywords</strong> — 장면 설명, AI가 분석한 성격 유형명, 성격 키워드</span>
+    </div>
+    <div class="prompt-block emotion">
+      <span class="prompt-tag emotion">감정 규칙</span>
+      <span class="prompt-desc"><strong>loves / dislikes</strong> — 파레이돌리아 효과 + 실제 존재 시 강조. 4가지 규칙이 템플릿에 고정.</span>
+    </div>
+  </div>
+
+  <h3>조립 순서 (prompt-builder.ts)</h3>
+  <div class="file-flow">
+    <div class="file-step active">
+      <code>1단계: 공통 블록 삽입</code>
+      <span class="role">{cubismBase} → CUBISM_BASE_BLOCK, {catPicassoConnection} → CAT_PICASSO_CONNECTION</span>
+    </div>
+    <div class="file-step active-green">
+      <code>2단계: 성격 + 장면 삽입</code>
+      <span class="role">{artistLabel}, {characteristics}, {moodKeywords}, {sceneDescription}, {temperament} 등</span>
+    </div>
+    <div class="file-step" style="border-left-color: #ec4899;">
+      <code>3단계: 감정 표현 삽입</code>
+      <span class="role">{loves}, {dislikes} → 분석 결과의 emotionalColorMap에서 가져옴</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4. 성격 악센트 ===== -->
+<section id="accents">
+  <h2><span>4.</span> 성격별 악센트 — 7가지 기질</h2>
+  <p class="desc">큐비즘 베이스는 동일. 성격에 따라 분위기·에너지·색감만 달라짐. (C안 하이브리드 전략)</p>
+
+  <table class="accent-table">
+    <thead>
+      <tr>
+        <th>기질</th>
+        <th>사용자 라벨</th>
+        <th>분위기</th>
+        <th>핵심 영어 키워드</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="label">playful</td>
+        <td>장난꾸러기 화가</td>
+        <td>밝고 역동적, 기하학적 장난기</td>
+        <td>vibrant energy, geometric playfulness</td>
+      </tr>
+      <tr>
+        <td class="label">fierce</td>
+        <td>열정의 화가</td>
+        <td>날카로운 각도, 강한 대비, 극적 구도</td>
+        <td>dramatic contrast, aggressive angles</td>
+      </tr>
+      <tr>
+        <td class="label">calm</td>
+        <td>온화한 화가</td>
+        <td>부드러운 곡선, 따뜻한 톤, 여유</td>
+        <td>gentle curves, warm serenity</td>
+      </tr>
+      <tr>
+        <td class="label">curious</td>
+        <td>몽상가 화가</td>
+        <td>왜곡된 형태, 몽환적, 다중 초점</td>
+        <td>dreamlike distortion, whimsical wonder</td>
+      </tr>
+      <tr>
+        <td class="label">aloof</td>
+        <td>고고한 화가</td>
+        <td>거대한 볼륨, 조각적, 차가운 톤</td>
+        <td>sculptural grandeur, cool elegance</td>
+      </tr>
+      <tr>
+        <td class="label">chaotic</td>
+        <td>자유로운 화가</td>
+        <td>파편화된 면, 콜라주, 다양한 질감</td>
+        <td>fragmented collage, textural chaos</td>
+      </tr>
+      <tr>
+        <td class="label">melancholy</td>
+        <td>감성파 화가</td>
+        <td>블루톤 분위기, 길쭉한 형태, 고요</td>
+        <td>contemplative blue undertones, serene solitude</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ===== 5. 레이어 구조 ===== -->
+<section id="layers">
+  <h2><span>5.</span> 레이어 구조 — 누가 누구를 부르나</h2>
+  <p class="desc">위에서 아래로만 호출. 아래 레이어는 위를 모릅니다.</p>
+
+  <div class="module-grid">
+    <div class="module-layer">
+      <span class="module-layer-title">components/ — 화면에 보이는 것</span>
+      <div class="module-items">
+        <span class="module-item"><code>features/landing/</code> 랜딩 화면</span>
+        <span class="module-item"><code>features/upload/</code> 입력 폼</span>
+        <span class="module-item"><code>features/analysis/</code> 분석 결과</span>
+        <span class="module-item"><code>features/result/</code> 최종 결과</span>
+        <span class="module-item"><code>common/</code> 로딩, 에러</span>
+        <span class="module-item"><code>layout/</code> 헤더, 푸터</span>
+        <span class="module-item"><code>ui/</code> shadcn 부품</span>
+      </div>
+    </div>
+    <div class="layer-arrow">▼ 이벤트 (클릭, 제출)</div>
+
+    <div class="module-layer">
+      <span class="module-layer-title green">hooks/ — 프론트 로직 (중간 다리)</span>
+      <div class="module-items">
+        <span class="module-item"><code>use-picatsso-store</code> 전체 상태</span>
+        <span class="module-item"><code>use-cat-analysis</code> 1차 AI</span>
+        <span class="module-item"><code>use-image-generation</code> 2차 AI</span>
+        <span class="module-item"><code>use-download</code> 다운로드</span>
+        <span class="module-item"><code>use-flow-history</code> 뒤로가기</span>
+      </div>
+    </div>
+    <div class="layer-arrow">▼ fetch('/api/...')</div>
+
+    <div class="module-layer">
+      <span class="module-layer-title yellow">app/api/ — 서버 API</span>
+      <div class="module-items">
+        <span class="module-item"><code>analyze/route.ts</code> 성격 분석</span>
+        <span class="module-item"><code>generate/route.ts</code> 이미지 생성</span>
+      </div>
+    </div>
+    <div class="layer-arrow">▼ 함수 호출</div>
+
+    <div class="module-layer">
+      <span class="module-layer-title muted">services/ — 외부 API 어댑터</span>
+      <div class="module-items">
+        <span class="module-item"><code>ai/gemini-analyzer</code> Gemini 분석</span>
+        <span class="module-item"><code>image/gemini-image-generator</code> Gemini 이미지</span>
+        <span class="module-item"><code>image/prompt-builder</code> 프롬프트 조립</span>
+        <span class="module-item"><code>storage/file-handler</code> 파일 처리</span>
+      </div>
+    </div>
+    <div class="layer-arrow">▼ 상수/타입 참조</div>
+
+    <div class="module-layer">
+      <span class="module-layer-title" style="background:#6b7280;">lib/ — 순수 데이터 (로직 없음)</span>
+      <div class="module-items">
+        <span class="module-item"><code>constants/prompts.ts</code> 프롬프트 4개</span>
+        <span class="module-item"><code>constants/personality-mapping.ts</code> 성격 매핑</span>
+        <span class="module-item"><code>constants/cat-vision-palette.ts</code> 색상표</span>
+        <span class="module-item"><code>types/cat.ts</code> 고양이 타입</span>
+        <span class="module-item"><code>types/art.ts</code> 아트 타입</span>
+        <span class="module-item"><code>config.ts</code> 모델명, 설정</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 6. 폴더 의미 ===== -->
+<section id="folders">
+  <h2><span>6.</span> 폴더 의미 사전</h2>
+  <p class="desc">각 폴더가 존재하는 이유와 담당하는 역할.</p>
+
+  <h3>src/ 하위</h3>
+  <div class="folder-card"><span class="name">app/</span><span class="meaning">Next.js App Router. URL 경로와 1:1 매핑. <code>page.tsx</code>=화면, <code>api/</code>=서버 엔드포인트. 여기서 Gemini API 키 같은 민감 정보를 안전하게 사용.</span></div>
+  <div class="folder-card"><span class="name">components/</span><span class="meaning">화면에 보이는 모든 것. <code>ui/</code>=라이브러리 부품, <code>common/</code>=재사용 공통, <code>layout/</code>=페이지 껍데기, <code>features/</code>=화면 단위 그룹.</span></div>
+  <div class="folder-card"><span class="name">hooks/</span><span class="meaning">React 커스텀 훅. 화면(components)과 서버(api) 사이의 <strong>중간 다리</strong>. "버튼 클릭 → API 호출 → 결과 저장" 같은 프론트 로직을 담당.</span></div>
+  <div class="folder-card"><span class="name">services/</span><span class="meaning">외부 API와 통신하는 <strong>어댑터 레이어</strong>. 인터페이스(계약서)와 구현체(Gemini용)가 분리. 나중에 API를 바꿔도 여기만 수정.</span></div>
+  <div class="folder-card"><span class="name">lib/</span><span class="meaning">순수한 데이터 정의. API 호출이나 UI 코드 없음. 프로젝트 전역에서 쓰는 <strong>타입, 상수, 설정</strong>의 중앙 보관소.</span></div>
+  <div class="folder-card"><span class="name">lib/constants/</span><span class="meaning">변하지 않는 값들. 프롬프트 텍스트, 색상 팔레트, 성격→화풍 매핑. <strong>"프로젝트의 설정 파일"</strong> 역할. 여기만 수정하면 AI 결과물이 바뀜.</span></div>
+  <div class="folder-card"><span class="name">lib/types/</span><span class="meaning">TypeScript 타입 정의. CatAnalysis, ArtStyle, Temperament 등. 데이터가 어떤 모양인지 정의하는 <strong>"설계도"</strong>.</span></div>
+
+  <h3>docs/ 하위</h3>
+  <div class="folder-card"><span class="name">docs/manual/</span><span class="meaning">기술 매뉴얼. 아키텍처, 데이터 흐름, API 스펙, 설정 가이드, 시각화 가이드(이 파일).</span></div>
+  <div class="folder-card"><span class="name">docs/prompt-management/</span><span class="meaning">프롬프트 전용 관리. 토의 기록(discussion-log), 화가 레퍼런스(artist-reference), 설계 문서(PROMPT_ENGINEERING).</span></div>
+  <div class="folder-card"><span class="name">docs/references/</span><span class="meaning">외부 참고자료. API 가격/스펙, 고양이 색각 과학 논문 정리.</span></div>
+</section>
+
+<!-- ===== 7. 어댑터 패턴 ===== -->
+<section id="adapters">
+  <h2><span>7.</span> 어댑터 패턴 — 교체 가능한 부품</h2>
+  <p class="desc">인터페이스(계약서)와 구현체가 분리되어 있어서, 구현체만 바꾸면 다른 코드 수정 없이 API 교체 가능.</p>
+
+  <div class="adapter-box">
+    <div class="adapter-card">
+      <h4>성격 분석</h4>
+      <div class="interface">CatAnalyzer (계약서)</div>
+      <div class="impl">현재: GeminiAnalyzer</div>
+      <div class="impl" style="border-style:dashed; color:var(--text-muted);">교체 예: ClaudeAnalyzer</div>
+      <p class="swap">services/ai/ 폴더 안에서만 작업</p>
+    </div>
+    <div class="adapter-card">
+      <h4>이미지 생성</h4>
+      <div class="interface">ImageGenerator (계약서)</div>
+      <div class="impl">현재: GeminiImageGenerator</div>
+      <div class="impl" style="border-style:dashed; color:var(--text-muted);">교체 예: DallEGenerator</div>
+      <p class="swap">services/image/ 폴더 안에서만 작업</p>
+    </div>
+    <div class="adapter-card">
+      <h4>프롬프트 재료</h4>
+      <div class="interface">독립 상수 블록</div>
+      <div class="impl">CUBISM_BASE_BLOCK</div>
+      <div class="impl">personality-mapping</div>
+      <div class="impl">cat-vision-palette</div>
+      <p class="swap">lib/constants/ 안에서 상수만 수정</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 8. 문서 지도 ===== -->
+<section id="docs">
+  <h2><span>8.</span> 문서 지도 — 어떤 문서가 뭘 담당하나</h2>
+  <p class="desc">프로젝트의 모든 문서와 각각의 역할.</p>
+
+  <h3>프로젝트 관리</h3>
+  <div class="doc-map">
+    <div class="doc-card blue-accent">
+      <div class="doc-name">CLAUDE.md</div>
+      <div class="doc-role">Claude Code 지침. 등급 체계(규칙/가이드), 협업 흐름, 필수 참조 문서 목록. <strong>이 파일이 바뀌면 visual-guide.html도 업데이트.</strong></div>
+    </div>
+    <div class="doc-card blue-accent">
+      <div class="doc-name">PRD.md</div>
+      <div class="doc-role">제품 요구사항 정의서. "뭘 만드는가 + 왜 만드는가". 확정된 기능만 기록.</div>
+    </div>
+    <div class="doc-card green-accent">
+      <div class="doc-name">ROADMAP.md</div>
+      <div class="doc-role">개발 로드맵 + 아이디어. "언제 만드는가". Phase별 태스크 + 💡 아이디어 섹션.</div>
+    </div>
+    <div class="doc-card green-accent">
+      <div class="doc-name">BACKLOG.md</div>
+      <div class="doc-role">작업 이력. 날짜, 작업 ID, 내용, 상태. 모든 완료/진행 작업의 기록.</div>
+    </div>
+    <div class="doc-card yellow-accent">
+      <div class="doc-name">MEMORY.md</div>
+      <div class="doc-role">세션 연속성. 마일스톤별 자동 업데이트. "이어서 하자" 할 때 여기부터 읽음.</div>
+    </div>
+    <div class="doc-card muted-accent">
+      <div class="doc-name">CONVENTIONS.md</div>
+      <div class="doc-role">코딩 규칙. 모듈화 원칙, HTML 분리 기준, 어댑터 패턴 규칙.</div>
+    </div>
+  </div>
+
+  <h3>기술 매뉴얼 (docs/manual/)</h3>
+  <div class="doc-map">
+    <div class="doc-card blue-accent">
+      <div class="doc-name">ARCHITECTURE.md</div>
+      <div class="doc-role">아키텍처. 전체 파일 트리, 폴더 의미, 레이어 구조, 어댑터 교체 가이드.</div>
+    </div>
+    <div class="doc-card blue-accent">
+      <div class="doc-name">visual-guide.html</div>
+      <div class="doc-role">시각화 매뉴얼 (이 파일). 프로세스 흐름도, 프롬프트 조립, 모듈 관계를 그림으로.</div>
+    </div>
+    <div class="doc-card green-accent">
+      <div class="doc-name">DATA_FLOW.md</div>
+      <div class="doc-role">데이터 흐름도. 입력 → 분석 → 생성 전체 데이터 파이프라인.</div>
+    </div>
+    <div class="doc-card green-accent">
+      <div class="doc-name">API_SPEC.md</div>
+      <div class="doc-role">API 엔드포인트 상세 스펙. 요청/응답 형식, 에러 코드.</div>
+    </div>
+    <div class="doc-card yellow-accent">
+      <div class="doc-name">SETUP_GUIDE.md</div>
+      <div class="doc-role">환경 설정. 설치 방법, .env 설정, Vercel 배포 가이드.</div>
+    </div>
+  </div>
+
+  <h3>프롬프트 관리 (docs/prompt-management/)</h3>
+  <div class="doc-map">
+    <div class="doc-card blue-accent">
+      <div class="doc-name">PROMPT_ENGINEERING.md</div>
+      <div class="doc-role">프롬프트 설계. 파이프라인, 매핑 테이블, 감정 규칙, 튜닝 로그.</div>
+    </div>
+    <div class="doc-card green-accent">
+      <div class="doc-name">discussion-log.html</div>
+      <div class="doc-role">토의 기록. 프롬프트 관련 토의 내용과 결정 사항. 태그별 필터.</div>
+    </div>
+    <div class="doc-card yellow-accent">
+      <div class="doc-name">artist-reference.html</div>
+      <div class="doc-role">화가 레퍼런스. 피카소 시기별 기법, 색상, 키워드. 탭 형식.</div>
+    </div>
+  </div>
+</section>
+
+</div><!-- container -->
+</body>
+</html>

@@ -1,11 +1,12 @@
 /** 고양이 성격 기질 유형 */
 export type Temperament =
-  | 'playful'   // 장난꾸러기
-  | 'calm'      // 잔잔한/포근한
-  | 'fierce'    // 사나운/싸움꾼
-  | 'curious'   // 호기심 많은
-  | 'aloof'     // 도도한
-  | 'chaotic';  // 엉뚱한
+  | 'playful'     // 장난꾸러기
+  | 'calm'        // 잔잔한/포근한
+  | 'fierce'      // 사나운/싸움꾼
+  | 'curious'     // 호기심 많은
+  | 'aloof'       // 도도한
+  | 'chaotic'     // 엉뚱한
+  | 'melancholy'; // 쓸쓸한/감성적
 
 /** 집사-고양이 관계 유형 */
 export type OwnerRelationship =
