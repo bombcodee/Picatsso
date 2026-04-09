@@ -27,4 +27,6 @@ export interface ArtGenerationRequest {
   analysis: CatAnalysis;
   style: ArtStyle;
   sceneDescription?: string;
+  /** 장면 사진 base64 — 이미지 생성 AI에 구도 참조용으로 전달 */
+  sceneImageBase64?: string;
 }

@@ -45,3 +45,9 @@
 | 2026-04-08 | DIS-001 | 화풍 전략 심층 토의 (A/B/C안) | ✅ 완료 | C안 하이브리드 채택 |
 | 2026-04-08 | DIS-002 | 청색 시기 처리 방식 토의 | ✅ 완료 | 블루톤 분위기 악센트로 확정 |
 | 2026-04-08 | DOC-015 | 토의 결과 문서 최신화 | ✅ 완료 | MEMORY, discussion-log, PROMPT_ENGINEERING, ROADMAP, BACKLOG |
+| 2026-04-08 | DEV-017 | C안 프롬프트 코드 적용 | ✅ 완료 | CUBISM_BASE_BLOCK + CAT_PICASSO_CONNECTION + 7기질 moodKeywords |
+| 2026-04-08 | DEV-018 | melancholy 기질 추가 | ✅ 완료 | 타입 + 매핑 + 태그 + 분석 프롬프트 |
+| 2026-04-09 | DOC-016 | 시각화 매뉴얼 + ARCHITECTURE 보강 | ✅ 완료 | visual-guide.html + 폴더 의미 + 레이어 구조 |
+| 2026-04-09 | DIS-003 | 장면 사진 미전달 문제 토의 | ✅ 완료 | C안(사진분석+구도참조) 채택 |
+| 2026-04-09 | DEV-019 | 장면 사진 AI 분석 (1.5차) 구현 | ✅ 완료 | SCENE_ANALYSIS_PROMPT + route.ts 분석 + FormData 전달 + 구도 참조 |
+| 2026-04-09 | DOC-017 | 장면 분석 관련 문서 최신화 | ✅ 완료 | API_SPEC, DATA_FLOW, MEMORY, BACKLOG |

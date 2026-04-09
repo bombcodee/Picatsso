@@ -45,13 +45,24 @@
          │  JSON (POST) { analysis, sceneDescription }
          ▼
                                    6. /api/generate
-                                      ├── CatAnalysis + sceneDescription 수신
+                                      ├── CatAnalysis + sceneDescription + sceneImage 수신
+                                      │
+                                      ├── [1.5차] 장면 사진이 있으면:
+                                      │   └── Gemini Flash로 장면 사진 분석
+                                      │       → 고양이 시점 영어 묘사 생성
+                                      │       → 사용자 텍스트("가족들 보는 중") 보강
+                                      │                                     Gemini 2.5 Flash
+                                      │                                     (텍스트/비전)
+                                      │
                                       ├── promptBuilder로 프롬프트 조립
-                                      │   ├── 장면만 그리기 (CRITICAL RULE)
-                                      │   ├── 성격 → 화풍 키워드
+                                      │   ├── 큐비즘 공통 베이스 (CUBISM_BASE_BLOCK)
+                                      │   ├── 고양이×피카소 연결 (CAT_PICASSO_CONNECTION)
+                                      │   ├── 성격 → 분위기 악센트 (moodKeywords)
                                       │   ├── 고양이 시각 색감
-                                      │   └── 파레이돌리아 효과 (감정 표현)
+                                      │   └── 파레이돌리아 효과 (감정 표현 4규칙)
+                                      │
                                       └── GeminiImageGenerator.generate()
+                                          └── 프롬프트 + 장면 사진(구도 참조) 전달
                                               │
                                               ▼
                                                                     7. Gemini 2.5 Flash Image
@@ -75,21 +86,28 @@
 ```
 CatAnalysis (분석 결과)
     │
-    ├── temperament → TEMPERAMENT_TO_ART_STYLE → 화풍 결정
+    ├── temperament → TEMPERAMENT_TO_ART_STYLE → 분위기 악센트 결정
     ├── keywords → 분위기 키워드
-    ├── emotionalColorMap.loves → 파레이돌리아 대상 (직접 안 그림)
-    ├── emotionalColorMap.dislikes → 흐릿한 구석 암시
+    ├── emotionalColorMap.loves → 파레이돌리아 대상 / 실제 있으면 강조
+    ├── emotionalColorMap.dislikes → 흐릿한 구석 암시 / 실제 있으면 회색
     │
-    + sceneDescription (장면 설명)
+    + enrichedSceneDescription (장면 묘사)
+    │   └── 장면 사진이 있으면: AI가 사진 분석 → 영어 묘사 자동 생성
+    │       장면 사진이 없으면: 사용자 텍스트 그대로 사용
     │
     ▼
-buildImagePrompt()
+buildImagePrompt() — 레고 블록 조립
+    │
+    ├── CUBISM_BASE_BLOCK (공통 큐비즘 화법)
+    ├── CAT_PICASSO_CONNECTION (고양이 시각 과학 연결)
+    ├── moodKeywords (성격별 분위기 악센트)
     │
     ▼
 "이 고양이가 화가로서 이 장면을 그린다면?"
     ├── 장면만 그림 (설명/취향의 물체 추가 금지)
     ├── 고양이 낮은 시점 (ground level)
-    ├── 성격이 붓터치/구도/에너지에 반영
+    ├── 큐비즘 베이스 (굵은 윤곽선, 면 분할, 다중 시점)
+    ├── 성격이 붓터치/구도/에너지에 반영 (분위기 악센트)
     ├── 고양이 시각 색감 (파란/녹/노란, 빨강 금지)
     └── 파레이돌리아: 좋아하는 것 형태가 자연물에 은근히 닮음
 ```
@@ -123,4 +141,4 @@ usePicatssoStore
 
 ---
 
-> 마지막 동기화: 2026-04-06
+> 마지막 동기화: 2026-04-09

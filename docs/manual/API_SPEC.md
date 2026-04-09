@@ -48,7 +48,18 @@
 아트워크 이미지 생성 요청
 
 ### Request
-- **Content-Type:** `application/json`
+
+두 가지 형식 지원:
+
+**형식 A: 장면 사진 있을 때** — `multipart/form-data`
+
+| 필드 | 타입 | 필수 | 설명 |
+|------|------|------|------|
+| `analysis` | string (JSON) | 필수 | CatAnalysis 객체를 JSON 문자열로 |
+| `sceneDescription` | string | 선택 | 고양이가 보는 장면 설명 ("가족들 보는 중" 등) |
+| `sceneImage` | File | 선택 | 장면 사진 (JPEG/PNG/WebP) |
+
+**형식 B: 장면 사진 없을 때** — `application/json`
 
 ```json
 {
@@ -57,10 +68,18 @@
 }
 ```
 
-| 필드 | 타입 | 필수 | 설명 |
-|------|------|------|------|
-| `analysis` | CatAnalysis | 필수 | /api/analyze의 응답 결과 |
-| `sceneDescription` | string | 선택 | 고양이가 보고 있는 장면 설명 (없으면 기본 장면 적용) |
+### 내부 처리 흐름
+
+```
+장면 사진이 있으면:
+  1.5차 AI: 장면 사진 → Gemini Flash로 고양이 시점 영어 묘사 생성
+            사용자 텍스트("가족들 보는 중")를 참고하되 사진 우선
+  2차 AI:   묘사 텍스트 + 장면 사진 원본 → Gemini Image에 전달
+            (묘사=감정 규칙 적용 / 사진=구도 참조)
+
+장면 사진이 없으면:
+  사용자 텍스트만으로 2차 AI 직접 호출 (기존 방식)
+```
 
 ### Response (200)
 ```json
@@ -71,13 +90,13 @@
       "imageBase64": "data:image/png;base64,...",
       "prompt": "You are painting AS a cat...",
       "style": {
-        "name": "다이내믹 표현주의",
+        "name": "장난꾸러기 화가",
         "picassoPeriod": "아프리카 미술 영향기",
-        "characteristics": "역동적 붓터치, 밝은 톤, 움직임",
-        "promptKeywords": ["dynamic expressionism", "..."],
+        "characteristics": "밝고 역동적인 에너지, 기하학적 장난기가 넘치는 구도",
+        "moodKeywords": ["vibrant energy", "..."],
         "temperament": "playful"
       },
-      "createdAt": "2026-04-06T12:00:00.000Z"
+      "createdAt": "2026-04-09T12:00:00.000Z"
     }
   ]
 }
@@ -91,8 +110,10 @@
 - **Rate Limit:** Gemini API 종량제 (Google Cloud 결제 설정 완료, $300 크레딧)
 - **API 키:** 서버 사이드 전용 (`.env.local` → `GEMINI_API_KEY`)
 - **이미지 생성 수:** 1회 요청 시 2개 생성
-- **프롬프트 특징:** 고양이 시점 ("고양이가 그린 그림"), 파레이돌리아 효과
+- **AI 호출 횟수:** 최대 3회 (1차 성격 분석 + 1.5차 장면 묘사 + 2차 이미지 생성 ×2)
+- **프롬프트 특징:** 큐비즘 베이스 + 성격 악센트 (C안), 파레이돌리아 효과, 고양이 시점
+- **장면 사진 분석:** 사용자가 간단한 텍스트만 써도 사진에서 상세 묘사 자동 생성
 
 ---
 
-> 마지막 동기화: 2026-04-06
+> 마지막 동기화: 2026-04-09

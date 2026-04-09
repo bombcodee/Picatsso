@@ -24,6 +24,9 @@ export class GeminiImageGenerator implements ImageGenerator {
       } as any,
     });
 
+    /** 장면 사진이 있으면 이미지 생성 AI에 구도 참조용으로 전달 */
+    const sceneImagePart = this.buildSceneImagePart(request.sceneImageBase64);
+
     const artworks: GeneratedArtwork[] = [];
     const count = config.generation.imageCount;
 
@@ -32,7 +35,13 @@ export class GeminiImageGenerator implements ImageGenerator {
         ? prompt
         : `${prompt}\n\nCreate a different variation — change the composition, angle, or emphasis while keeping the same style and color palette. Variation ${i + 1}.`;
 
-      const result = await model.generateContent(variation);
+      /** 프롬프트 + (선택) 장면 사진을 함께 전달 */
+      const contentParts: (string | { inlineData: { data: string; mimeType: string } })[] = [variation];
+      if (sceneImagePart) {
+        contentParts.push(sceneImagePart);
+      }
+
+      const result = await model.generateContent(contentParts);
       const response = result.response;
 
       const imageData = this.extractImageFromResponse(response);
@@ -49,6 +58,18 @@ export class GeminiImageGenerator implements ImageGenerator {
     }
 
     return artworks;
+  }
+
+  /** 장면 사진 base64 → Gemini inlineData 형식으로 변환 */
+  private buildSceneImagePart(sceneImageBase64?: string): { inlineData: { data: string; mimeType: string } } | null {
+    if (!sceneImageBase64) return null;
+
+    const [meta, data] = sceneImageBase64.includes(',')
+      ? sceneImageBase64.split(',')
+      : ['data:image/jpeg;base64', sceneImageBase64];
+    const mimeType = meta.match(/data:(.*?);/)?.[1] ?? 'image/jpeg';
+
+    return { inlineData: { data: data ?? sceneImageBase64, mimeType } };
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

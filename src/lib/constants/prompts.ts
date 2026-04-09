@@ -1,3 +1,35 @@
+/**
+ * 장면 사진 분석 프롬프트 — 고양이 시점으로 장면 묘사 생성 (1.5차 AI)
+ *
+ * [한국어 번역 — 확인용]
+ * 이 사진에 뭐가 있는지 고양이의 시선으로 묘사해줘.
+ * 고양이는 바닥 높이(약 25cm)에서 이 장면을 올려다보고 있다.
+ *
+ * 다음을 포함해서 영어 3~5문장으로 묘사:
+ * - 공간 구조 (실내/실외, 가구, 구조물)
+ * - 사람이나 동물의 위치, 자세, 크기감 (고양이 눈높이 기준)
+ * - 눈에 띄는 물체 (공, 장난감, 음식 등)
+ * - 빛의 방향과 분위기 (밝은지 어두운지)
+ * - 색상은 무시 (고양이 색각은 별도 처리함)
+ *
+ * 집사가 추가한 설명: "{userDescription}"
+ * 이 설명을 참고하되, 사진에서 직접 보이는 것을 우선으로 묘사해라.
+ */
+export const SCENE_ANALYSIS_PROMPT = `Describe what is in this photo from a cat's perspective.
+The cat is looking at this scene from ground level (about 25cm height), looking up.
+
+Include in your description (3-5 sentences in English):
+- Spatial structure (indoor/outdoor, furniture, structures)
+- People or animals: their positions, postures, and how large they appear from a cat's low viewpoint
+- Notable objects (balls, toys, food, plants, etc.)
+- Light direction and atmosphere (bright, dim, warm, cool)
+- Do NOT describe colors (cat color vision is handled separately)
+
+The cat's owner added this note: "{userDescription}"
+Use this as context, but prioritize what is directly visible in the photo.
+
+Respond with ONLY the scene description, no JSON, no formatting — just plain English text.`;
+
 /** 고양이 성격 분석용 시스템 프롬프트 (PROMPT_ENGINEERING.md Step 1) */
 export const ANALYSIS_SYSTEM_PROMPT = `당신은 고양이 행동 전문가입니다.
 집사가 제공한 고양이의 사진과 설명을 바탕으로 이 고양이의 성격과 특징을 분석해주세요.
