@@ -51,3 +51,8 @@
 | 2026-04-09 | DIS-003 | 장면 사진 미전달 문제 토의 | ✅ 완료 | C안(사진분석+구도참조) 채택 |
 | 2026-04-09 | DEV-019 | 장면 사진 AI 분석 (1.5차) 구현 | ✅ 완료 | SCENE_ANALYSIS_PROMPT + route.ts 분석 + FormData 전달 + 구도 참조 |
 | 2026-04-09 | DOC-017 | 장면 분석 관련 문서 최신화 | ✅ 완료 | API_SPEC, DATA_FLOW, MEMORY, BACKLOG |
+| 2026-04-09 | DEV-020 | 작업물 라이브러리 (/history) | ✅ 완료 | IndexedDB + 자동 저장 + 갤러리 UI |
+| 2026-04-09 | DEV-021 | Gemini 503 대응 | ✅ 완료 | withRetry() + 분석 모델 lite 변경 |
+| 2026-04-09 | DEV-022 | 큐비즘 A/B/C 테스트 + 아이의 시선 | 🔄 진행 중 | 원근법 제거 추가 필요 |
+| 2026-04-09 | DEV-023 | 색감 채도 풀기 | ✅ 완료 | COLOR PALETTE bold & vivid |
+| 2026-04-09 | FIX-003 | IndexedDB 서버사이드 에러 수정 | ✅ 완료 | typeof indexedDB 체크 추가 |
