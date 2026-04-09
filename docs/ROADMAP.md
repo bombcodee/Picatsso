@@ -68,9 +68,21 @@
 |---|--------|------|
 | 1-21 | 화풍 전략 토의 (A/B/C안 비교) | ✅ 완료 — C안 하이브리드 채택 |
 | 1-22 | 청색 시기 처리 방식 토의 | ✅ 완료 — 블루톤 분위기 악센트 |
-| 1-23 | personality-mapping.ts 키워드 재설계 | 📋 예정 |
-| 1-24 | prompts.ts 큐비즘 베이스 블록 추가 | 📋 예정 |
-| 1-25 | melancholy 기질 추가 | 📋 예정 |
+| 1-23 | personality-mapping.ts 키워드 재설계 | ✅ 완료 — 7기질 moodKeywords |
+| 1-24 | prompts.ts 큐비즘 베이스 블록 추가 | ✅ 완료 — CUBISM_BASE_BLOCK + CAT_PICASSO_CONNECTION |
+| 1-25 | melancholy 기질 추가 | ✅ 완료 |
+| 1-26 | 장면 사진 AI 분석 (1.5차) 구현 | ✅ 완료 — SCENE_ANALYSIS_PROMPT |
+| 1-27 | 색감 채도 풀기 (bold & vivid) | ✅ 완료 — COLOR PALETTE 수정 |
+| 1-28 | 큐비즘 스타일 A/B/C 비교 테스트 | 🔄 진행 중 — 아이의 시선 + 2D 강화 |
+| 1-29 | 큐비즘 베이스 최종 확정 | 📋 예정 |
+
+### Milestone 1-G: 작업물 히스토리 🔄 진행 중
+| # | 태스크 | 상태 |
+|---|--------|------|
+| 1-30 | IndexedDB 스토리지 어댑터 | 🔄 진행 중 |
+| 1-31 | 생성 완료 시 자동 저장 | 📋 예정 |
+| 1-32 | 히스토리 페이지 UI (/history) | 📋 예정 |
+| 1-33 | (추후) Supabase 스토리지 교체 | 📋 예정 — Phase 3 |
 
 ---
 

@@ -2,6 +2,8 @@
 
 import { useCallback } from 'react';
 import { usePicatssoStore } from './use-picatsso-store';
+import { artworkStorage } from '@/services/storage';
+import type { SavedArtwork } from '@/services/storage';
 import type { GeneratedArtwork } from '@/lib/types';
 
 /** 아트워크 이미지 생성 API 호출 훅 */
@@ -36,6 +38,9 @@ export function useImageGeneration() {
       setArtworks(data.artworks);
       setGenerationLoading(false);
       goToStep(5); // 최종 결과
+
+      /** 생성 완료 시 IndexedDB에 자동 저장 */
+      saveToHistory(data.artworks, analysis, sceneDescription);
     } catch (error) {
       const message = error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.';
       setGenerationError(message);
@@ -44,6 +49,23 @@ export function useImageGeneration() {
   }, [analysis, sceneDescription, sceneImage, setArtworks, setGenerationLoading, setGenerationError, goToStep]);
 
   return { generate };
+}
+
+/** IndexedDB에 작업물 저장 (실패해도 사용자 경험에 영향 없음) */
+function saveToHistory(
+  artworks: GeneratedArtwork[],
+  analysis: NonNullable<ReturnType<typeof usePicatssoStore.getState>['analysis']>,
+  sceneDescription: string,
+): void {
+  const savedArtworks: SavedArtwork[] = artworks.map((artwork) => ({
+    ...artwork,
+    analysis,
+    sceneDescription,
+  }));
+
+  artworkStorage.save(savedArtworks).catch((error) => {
+    console.warn('[History] 저장 실패 (서비스에 영향 없음):', error);
+  });
 }
 
 /** 장면 사진이 있을 때 — FormData로 사진 + JSON 전달 */

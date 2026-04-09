@@ -46,14 +46,22 @@ export function Header() {
           </button>
         </div>
 
-        {currentStep === 0 && (
-          <button
-            onClick={() => goToStep(1)}
-            className="bg-[#4A90D9] hover:bg-[#2E5FA1] text-white px-5 py-2 rounded-full text-sm font-medium transition-colors"
+        <div className="flex items-center gap-2">
+          <a
+            href="/history"
+            className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground rounded-full hover:bg-muted transition-colors"
           >
-            시작하기
-          </button>
-        )}
+            라이브러리
+          </a>
+          {currentStep === 0 && (
+            <button
+              onClick={() => goToStep(1)}
+              className="bg-[#4A90D9] hover:bg-[#2E5FA1] text-white px-5 py-2 rounded-full text-sm font-medium transition-colors"
+            >
+              시작하기
+            </button>
+          )}
+        </div>
       </div>
     </header>
   );
