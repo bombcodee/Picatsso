@@ -3,6 +3,7 @@ import type { CatAnalyzer } from './analyzer';
 import type { CatAnalysis } from '@/lib/types';
 import { ANALYSIS_SYSTEM_PROMPT } from '@/lib/constants';
 import { config } from '@/lib/config';
+import { withRetry } from '@/services/utils/retry';
 
 /** Gemini API를 사용한 고양이 성격 분석 구현체 */
 export class GeminiAnalyzer implements CatAnalyzer {
@@ -37,11 +38,13 @@ export class GeminiAnalyzer implements CatAnalyzer {
 
     const userMessage = this.buildUserMessage(input);
 
-    const result = await model.generateContent([
-      ANALYSIS_SYSTEM_PROMPT,
-      ...imageParts,
-      userMessage,
-    ]);
+    const result = await withRetry(() =>
+      model.generateContent([
+        ANALYSIS_SYSTEM_PROMPT,
+        ...imageParts,
+        userMessage,
+      ])
+    );
 
     const text = result.response.text();
     return this.parseResponse(text);

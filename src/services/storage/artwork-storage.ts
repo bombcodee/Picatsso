@@ -41,8 +41,12 @@ const DB_NAME = 'picatsso-history';
 const STORE_NAME = 'artworks';
 const DB_VERSION = 1;
 
-/** IndexedDB 연결 */
+/** IndexedDB 연결 (브라우저에서만 작동) */
 function openDB(): Promise<IDBDatabase> {
+  if (typeof indexedDB === 'undefined') {
+    return Promise.reject(new Error('IndexedDB is not available (server-side)'));
+  }
+
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
 

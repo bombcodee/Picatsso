@@ -34,8 +34,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(analysis);
   } catch (error) {
     console.error('[API] 분석 실패:', error);
+    const message = error instanceof Error ? error.message : String(error);
     return NextResponse.json(
-      { error: '고양이 분석 중 문제가 발생했습니다. 다시 시도해주세요.' },
+      { error: '고양이 분석 중 문제가 발생했습니다. 다시 시도해주세요.', detail: message },
       { status: 500 },
     );
   }

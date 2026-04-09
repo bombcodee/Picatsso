@@ -163,7 +163,7 @@ const CUBISM_VERSION_C = `Painted like Picasso's Guernica, The Weeping Woman, an
 This is how a cat sees the world — its wide field of vision (200°) naturally creates the multiple perspectives that define Cubism.`;
 
 /** 현재 활성 버전 — A안 테스트부터 시작 */
-export const CUBISM_BASE_BLOCK = CUBISM_VERSION_A;
+export const CUBISM_BASE_BLOCK = CUBISM_VERSION_B;
 
 /**
  * 고양이×피카소 연결 — 과학적 근거를 프롬프트에 녹임

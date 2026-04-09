@@ -3,6 +3,7 @@ import type { ImageGenerator } from './generator';
 import type { ArtGenerationRequest, GeneratedArtwork } from '@/lib/types';
 import { buildImagePrompt, getArtStyleForAnalysis } from './prompt-builder';
 import { config } from '@/lib/config';
+import { withRetry } from '@/services/utils/retry';
 
 /** Gemini Image API를 사용한 이미지 생성 구현체 */
 export class GeminiImageGenerator implements ImageGenerator {
@@ -37,7 +38,7 @@ export class GeminiImageGenerator implements ImageGenerator {
         ? prompt
         : `${prompt}\n\nCreate a different variation — change the composition, angle, or emphasis while keeping the same style and color palette. Variation ${i + 1}.`;
 
-      const result = await model.generateContent(variation);
+      const result = await withRetry(() => model.generateContent(variation));
       const response = result.response;
 
       const imageData = this.extractImageFromResponse(response);

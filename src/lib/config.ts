@@ -2,7 +2,7 @@
 export const config = {
   gemini: {
     apiKey: process.env.GEMINI_API_KEY ?? '',
-    analysisModel: 'gemini-2.5-flash',
+    analysisModel: 'gemini-2.5-flash-lite',
     imageModel: 'gemini-2.5-flash-image',
   },
   upload: {

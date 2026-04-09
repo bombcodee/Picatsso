@@ -4,6 +4,7 @@ import { GeminiImageGenerator } from '@/services/image/gemini-image-generator';
 import { getArtStyleForAnalysis } from '@/services/image/prompt-builder';
 import { SCENE_ANALYSIS_PROMPT } from '@/lib/constants';
 import { config } from '@/lib/config';
+import { withRetry } from '@/services/utils/retry';
 import type { CatAnalysis } from '@/lib/types';
 
 export async function POST(request: NextRequest) {
@@ -85,10 +86,12 @@ async function analyzeScenePhoto(imageBase64: string, userDescription: string): 
 
     const prompt = SCENE_ANALYSIS_PROMPT.replace('{userDescription}', userDescription || 'No additional description provided.');
 
-    const result = await model.generateContent([
-      prompt,
-      { inlineData: { data: data ?? imageBase64, mimeType } },
-    ]);
+    const result = await withRetry(() =>
+      model.generateContent([
+        prompt,
+        { inlineData: { data: data ?? imageBase64, mimeType } },
+      ])
+    );
 
     const text = result.response.text().trim();
     return text || null;
