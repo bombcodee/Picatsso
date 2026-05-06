@@ -217,4 +217,6 @@ RULE 4 — Disliked thing NOT in scene → dim corners hint at uneasy shapes.
 === MOOD ===
 {keywords}
 
+REMEMBER: All distortion and mood must stay within CUBIST structure — fragmented angular planes, thick outlines, multiple viewpoints. Never abandon cubism for another style.
+
 The result: charmingly imperfect yet beautiful — "this is exactly how this cat would paint."`;

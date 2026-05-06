@@ -47,7 +47,10 @@ export const TEMPERAMENT_TO_ART_STYLE: Record<Temperament, ArtStyle> = {
     nameEn: 'The Gentle Painter',
     picassoPeriod: '장밋빛 시기 (1904-1906)',
     characteristics: '부드러운 곡선과 따뜻한 톤, 여유롭고 평화로운 분위기',
-    characteristicsEn: 'Soft gentle curves with warm peaceful atmosphere, like Picasso\'s Rose Period',
+    // [주석 사유] Rose Period는 큐비즘이 아님(큐비즘 이전 시기). 작품명이 AI를 큐비즘에서 이탈시킬 수 있어 제거.
+    //   테스트 후 큐비즘과 공존 가능하면 복원 검토. 현재는 분위기만 텍스트로 표현.
+    // 원본: 'Soft gentle curves with warm peaceful atmosphere, like Picasso\'s Rose Period'
+    characteristicsEn: 'Soft gentle curves with warm peaceful atmosphere — tender and nurturing, like a sunlit afternoon nap',
     moodKeywords: [
       'gentle curves', 'warm serenity', 'soft flowing lines',
       'peaceful atmosphere', 'tender warmth', 'quiet harmony',
@@ -59,12 +62,20 @@ export const TEMPERAMENT_TO_ART_STYLE: Record<Temperament, ArtStyle> = {
     nameEn: 'The Dreamer Painter',
     picassoPeriod: '초현실주의 영향기',
     characteristics: '꿈과 현실이 뒤섞인 초현실적 세계',
-    characteristicsEn: 'Dream and reality merged into surreal world — like Picasso\'s Figures by the Sea and Seated Bather',
+    // [주석 사유] Figures by the Sea / Seated Bather는 초현실주의 작품(1930-31)으로 큐비즘이 아님.
+    //   "melting organic forms", "soft curves morphing"은 큐비즘의 각진 면 분할과 직접 충돌.
+    //   AI가 프롬프트 뒷부분을 더 강하게 따르므로, 여기서 초현실주의를 명시하면 큐비즘이 무시됨.
+    //   테스트 후 결과 확인하고, 필요시 큐비즘과 양립 가능한 형태로 일부 복원 검토.
+    // 원본 characteristicsEn: 'Dream and reality merged into surreal world — like Picasso\'s Figures by the Sea and Seated Bather'
+    characteristicsEn: 'Cubist structure with surreal dreamlike atmosphere — familiar objects in impossible arrangements, reality feels unstable',
+    // 원본 moodKeywords: ['Picasso surrealist style like Figures by the Sea and Seated Bather', 'melting organic bone-like forms', 'dream logic where objects float in impossible positions', 'soft curves morphing into grotesque shapes', 'hallucinatory atmosphere', 'reality dissolving into fantasy']
     moodKeywords: [
-      'Picasso surrealist style like Figures by the Sea and Seated Bather',
-      'melting organic bone-like forms', 'dream logic where objects float in impossible positions',
-      'soft curves morphing into grotesque shapes', 'hallucinatory atmosphere',
-      'reality dissolving into fantasy',
+      'dreamlike distortion within cubist fragmented planes',
+      'familiar objects placed in impossible positions',
+      'multiple realities overlapping in the same frame',
+      'unsettling yet fascinating atmosphere',
+      'reality feels unstable and shifting',
+      'curious wandering gaze exploring every corner',
     ],
     temperament: 'curious',
   },
@@ -73,7 +84,10 @@ export const TEMPERAMENT_TO_ART_STYLE: Record<Temperament, ArtStyle> = {
     nameEn: 'The Noble Painter',
     picassoPeriod: '신고전주의 시기',
     characteristics: '거대한 볼륨감과 조각적 형태, 차갑고 우아한 위엄',
-    characteristicsEn: 'Monumental sculptural forms with cold elegant dignity, like Picasso\'s Neoclassical period',
+    // [주석 사유] Neoclassical period(1918-1925)는 큐비즘이 아님(신고전주의). AI가 고전적 사실주의로 빠질 수 있어 제거.
+    //   테스트 후 큐비즘과 공존 가능하면 복원 검토. 현재는 분위기만 텍스트로 표현.
+    // 원본: 'Monumental sculptural forms with cold elegant dignity, like Picasso\'s Neoclassical period'
+    characteristicsEn: 'Monumental sculptural forms with cold elegant dignity — towering, detached, looking down from above',
     moodKeywords: [
       'sculptural grandeur', 'cool elegance', 'monumental forms',
       'dignified composure', 'commanding presence', 'refined detachment',
@@ -97,7 +111,10 @@ export const TEMPERAMENT_TO_ART_STYLE: Record<Temperament, ArtStyle> = {
     nameEn: 'The Melancholic Painter',
     picassoPeriod: '청색 시기 (1901-1904)',
     characteristics: '깊은 블루톤 분위기 속 길쭉한 형태, 고요하고 감성적인 세계',
-    characteristicsEn: 'Deep blue undertones with elongated forms and quiet contemplation, like Picasso\'s Blue Period',
+    // [주석 사유] Blue Period(1901-1904)는 큐비즘이 아님(큐비즘 이전 시기). 사실적 인물화로 빠질 수 있어 제거.
+    //   테스트 후 큐비즘과 공존 가능하면 복원 검토. 현재는 분위기만 텍스트로 표현.
+    // 원본: 'Deep blue undertones with elongated forms and quiet contemplation, like Picasso\'s Blue Period'
+    characteristicsEn: 'Deep blue undertones with elongated forms and quiet contemplation — lonely stillness, like staring out a rainy window',
     moodKeywords: [
       'contemplative blue undertones', 'elongated forms', 'quiet introspection',
       'dreamy atmospheric depth', 'gentle melancholic beauty', 'serene solitude',
