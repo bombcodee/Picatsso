@@ -51,4 +51,8 @@ export interface CatAnalysis {
   emotionalColorMap: EmotionalColorMap;
   ownerRelationship: OwnerRelationship;
   ownerRelationshipDetail: string;
+  /** 프롬프트용 영어 필드 — AI에 전달 시 사용 */
+  personalityTypeEn: string;
+  keywordsEn: string[];
+  emotionalColorMapEn: EmotionalColorMap;
 }

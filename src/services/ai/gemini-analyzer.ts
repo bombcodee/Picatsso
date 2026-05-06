@@ -85,6 +85,14 @@ export class GeminiAnalyzer implements CatAnalyzer {
       },
       ownerRelationship: parsed.ownerRelationship ?? 'neutral',
       ownerRelationshipDetail: parsed.ownerRelationshipDetail ?? '',
+      personalityTypeEn: parsed.personalityTypeEn ?? 'Mystery Cat',
+      keywordsEn: parsed.keywordsEn ?? [],
+      emotionalColorMapEn: {
+        loves: parsed.emotionalColorMapEn?.loves ?? [],
+        likes: parsed.emotionalColorMapEn?.likes ?? [],
+        neutral: parsed.emotionalColorMapEn?.neutral ?? [],
+        dislikes: parsed.emotionalColorMapEn?.dislikes ?? [],
+      },
     };
   }
 }
