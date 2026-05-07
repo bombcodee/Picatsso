@@ -27,9 +27,10 @@
                                       └── GeminiAnalyzer.analyze()
                                               │
                                               ▼
-                                                                    3. Gemini 2.5 Flash
+                                                                    3. Gemini 2.5 Flash Lite
                                                                        (텍스트/비전)
                                                                        → JSON 응답
+                                                                       (503 시 자동 재시도 최대 3회)
                                               │
                                               ▼
                                    4. CatAnalysis JSON 반환
@@ -76,7 +77,8 @@
 9. 결과 화면 표시
    ├── 아트워크 갤러리 (2개)
    ├── 다운로드 버튼
-   └── 다시하기 버튼
+   ├── 다시하기 버튼
+   └── IndexedDB에 자동 저장 → /history에서 조회 가능
 ```
 
 ---
@@ -141,4 +143,4 @@ usePicatssoStore
 
 ---
 
-> 마지막 동기화: 2026-04-09
+> 마지막 동기화: 2026-05-07

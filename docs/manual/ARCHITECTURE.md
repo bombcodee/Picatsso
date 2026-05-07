@@ -87,15 +87,16 @@ src/
 ├── services/                         # 외부 API 어댑터 레이어
 │   ├── ai/                           # 성격 분석 서비스
 │   │   ├── analyzer.ts               # CatAnalyzer 인터페이스 (계약서)
-│   │   ├── gemini-analyzer.ts        # Gemini 구현체 (gemini-2.5-flash)
+│   │   ├── gemini-analyzer.ts        # Gemini 구현체 (gemini-2.5-flash-lite, 503 재시도+폴백)
 │   │   └── index.ts                  # 팩토리 함수
 │   ├── image/                        # 이미지 생성 서비스
 │   │   ├── generator.ts              # ImageGenerator 인터페이스 (계약서)
 │   │   ├── gemini-image-generator.ts # Gemini Image 구현체 (gemini-2.5-flash-image)
 │   │   ├── prompt-builder.ts         # 프롬프트 조립 — 레시피 재료들을 합쳐서 최종 프롬프트 완성
 │   │   └── index.ts                  # 팩토리 함수
-│   └── storage/                      # 파일 처리
+│   └── storage/                      # 파일 처리 + 히스토리 저장
 │       ├── file-handler.ts           # base64 변환, 다운로드, 파일 검증
+│       ├── artwork-storage.ts        # IndexedDB 작업물 히스토리 (어댑터 패턴, Supabase 교체 가능)
 │       └── index.ts
 │
 ├── hooks/                            # 프론트엔드 로직 (컴포넌트 ↔ 서버 중간 다리)

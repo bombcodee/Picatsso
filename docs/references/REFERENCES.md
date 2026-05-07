@@ -77,7 +77,7 @@ npm install @google/generative-ai
 ### Picatsso 실제 적용 현황 (2026-04-06 테스트 결과)
 
 #### 무료 티어 제한 사항 (실측)
-- **텍스트 분석 모델 (`gemini-2.5-flash`):** ✅ 무료 할당량 있음, 정상 작동
+- **텍스트 분석 모델 (`gemini-2.5-flash-lite`):** ✅ 무료 할당량 있음, 정상 작동
 - **이미지 생성 모델 전부:** ❌ 무료 할당량 0 (limit: 0)
   - `gemini-2.5-flash-image`, `gemini-3.1-flash-image-preview`, `gemini-3-pro-image-preview` 전부 429 에러
   - **Google Cloud 결제 설정 필수** (종량제, $300 무료 크레딧 90일)
@@ -86,7 +86,7 @@ npm install @google/generative-ai
 #### 현재 Picatsso 모델 설정
 | 용도 | 모델 | 이유 |
 |------|------|------|
-| **고양이 분석** | `gemini-2.5-flash` | 비용 효율 최우선. 우리 용도에서 Pro와 체감 차이 미미. SaaS 업계 표준도 Flash급 사용 |
+| **고양이 분석** | `gemini-2.5-flash-lite` | 비용 효율 극대화. 503 에러 적고 분석 퀄리티 flash와 동등. 503 시 자동 재시도 3회 + 폴백 |
 | **이미지 생성** | `gemini-2.5-flash-image` | 비용 효율 + 이미지 생성 지원 확인됨 |
 
 #### 향후 이미지 모델 업그레이드 후보
